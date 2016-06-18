@@ -1,6 +1,6 @@
 В composer.json добавляем в блок require
 ```json
- "s-dev/builder_lara_5" : "1.*"
+ "s-dev/cms_lara_5" : "1.*"
 ```
 Выполняем
 ```json
