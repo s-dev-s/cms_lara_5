@@ -8,11 +8,11 @@ composer update
 ```
 Добавляем в файле app.php в блок providers
 ```php
-  Sdev\Builder\BuilderServiceProvider::class,
+  Vis\Builder\BuilderServiceProvider::class,
 ```
 Добавляем в файле app.php в блок alias
 ```php
-  'Jarboe' => Sdev\Builder\Facades\Jarboe::class,
+  'Jarboe' => Vis\Builder\Facades\Jarboe::class,
 ```
 В корне проекта в файле .env заменяем подключение к БД на свои
 
