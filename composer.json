@@ -1,10 +1,10 @@
 {
-    "name": "vis/builder_lara_5",
+    "name": "s-dev/cms_lara_5",
     "description": "Builder cms",
     "authors": [
         {
-            "name": "vis",
-            "email": "artur@vis-design.com"
+            "name": "s-dev",
+            "email": "mr.stavickiy@gmail.com"
         }
     ],
     "require": {
@@ -36,7 +36,7 @@
             "src/Console"
         ],
         "psr-4": {
-            "Vis\\Builder\\": "src/"
+            "S-dev\\Builder\\": "src/"
         }
     }
 }
