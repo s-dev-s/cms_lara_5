@@ -1,12 +1,11 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
 
-
-class DateField extends AbstractField 
+class DateField extends AbstractField
 {
 
     public function onSearchFilter(&$db, $value)
@@ -20,15 +19,15 @@ class DateField extends AbstractField
             $dateFrom = isset($value['from']) ? $this->getTimestamp($value['from']) : '28800';
             $dateTo = isset($value['to']) ? $this->getTimestamp($value['to']) : '2146939932';
             $db->whereBetween(
-                $table .'.'. $this->getFieldName(), 
+                $table .'.'. $this->getFieldName(),
                 array(
-                    date('Y-m-d', $dateFrom), 
+                    date('Y-m-d', $dateFrom),
                     date('Y-m-d', $dateTo)
                 )
             );
         } else {
             $db->where(
-                $table .'.'. $this->getFieldName(), 
+                $table .'.'. $this->getFieldName(),
                 date('Y-m-d', $this->getTimestamp($value))
             );
         }
@@ -132,5 +131,4 @@ class DateField extends AbstractField
 
         return $input->render();
     } // end getFilterRangeInput
-    
 }

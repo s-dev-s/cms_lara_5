@@ -50,7 +50,7 @@ class Tree extends Vis\Builder\Tree
 
     public function checkActiveMenu()
     {
-        $pathUrl = str_replace(Request::root()."/", "" , $this->getUrl());
+        $pathUrl = str_replace(Request::root()."/", "", $this->getUrl());
 
         //if main page
         if ($this->id == 1 && $this->slug == "/") {
@@ -61,5 +61,4 @@ class Tree extends Vis\Builder\Tree
             }
         }
     }
-
 }

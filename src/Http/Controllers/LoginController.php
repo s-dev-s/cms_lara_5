@@ -18,10 +18,9 @@ class LoginController extends Controller
                 return Redirect::to(config('builder.admin.uri'));
             }
         } catch (\Cartalyst\Sentinel\Checkpoints\NotActivatedException $e) {
-
-            Session::flash ("login_not_found", "Пользователь не активирован");
+            Session::flash("login_not_found", "Пользователь не активирован");
             Sentinel::logout();
-            return Redirect::route ("login_show");
+            return Redirect::route("login_show");
         }
 
         return view('admin::vis-login');
@@ -31,39 +30,35 @@ class LoginController extends Controller
     {
         if ($this->validation()) {
             try {
-
-                $user = Sentinel::authenticate (
+                $user = Sentinel::authenticate(
                     array (
-                        'email' => Input::get ('email'),
-                        'password' => Input::get ('password')
+                        'email' => Input::get('email'),
+                        'password' => Input::get('password')
                     )
                 );
 
                 if (!$user) {
+                    Session::flash("login_not_found", "Пользователь не найден");
 
-                    Session::flash ("login_not_found", "Пользователь не найден");
-
-                    return Redirect::route ("login_show");
+                    return Redirect::route("login_show");
                 }
 
-                return Redirect::intended (config ('builder.admin.uri'));
-
+                return Redirect::intended(config('builder.admin.uri'));
             } catch (\Cartalyst\Sentinel\Checkpoints\ThrottlingException $e) {
-                Session::flash ("login_not_found", "Превышено количество возможных попыток входа");
+                Session::flash("login_not_found", "Превышено количество возможных попыток входа");
 
-                return Redirect::route ("login_show");
+                return Redirect::route("login_show");
             } catch (\Cartalyst\Sentinel\Checkpoints\NotActivatedException $e) {
+                Session::flash("login_not_found", "Пользователь не активирован");
 
-                Session::flash ("login_not_found", "Пользователь не активирован");
-
-                return Redirect::route ("login_show");
+                return Redirect::route("login_show");
             }
         } else {
             Session::flash("login_not_found", "Некорректные данные запроса");
 
             return Redirect::route("login_show");
         }
-    } // end 
+    } // end
 
     public function doLogout()
     {
@@ -87,5 +82,4 @@ class LoginController extends Controller
             return true;
         }
     }
-
 }

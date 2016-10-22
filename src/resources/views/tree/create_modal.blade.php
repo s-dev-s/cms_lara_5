@@ -22,7 +22,7 @@
                         <select class="form-control" id="cf-template" name="template">
                             <option value="">{{__cms('Выберите шаблон')}}</option>
                             @foreach ( Config::get('builder.'.$treeName.'.templates') as $capt => $tpl)
-                                <option value="{{ $capt }}">{{ $capt }}</option>
+                                <option value="{{ $capt }}">{{ isset($tpl['title']) ? $tpl['title'] : $capt  }}</option>
                             @endforeach
                         </select>
                     </div>

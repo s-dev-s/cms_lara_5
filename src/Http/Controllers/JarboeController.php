@@ -141,9 +141,9 @@ class JarboeController
     {
         if (isset($this->fields[$ident])) {
             return $this->fields[$ident];
-        } else if (isset($this->patterns[$ident])) {
+        } elseif (isset($this->patterns[$ident])) {
             return $this->patterns[$ident];
-        } else if (isset($this->groupFields[$ident])) {
+        } elseif (isset($this->groupFields[$ident])) {
             return $this->groupFields[$ident];
         }
 
@@ -184,13 +184,11 @@ class JarboeController
 
         $fields = array();
         foreach ($definition['fields'] as $name => $info) {
-
             if ($this->isPatternField($name)) {
                 $this->patterns[$name] = $this->createPatternInstance($name, $info);
             } else {
                 $fields[$name] = $this->createFieldInstance($name, $info);
             }
-
         }
 
         return $fields;
@@ -280,5 +278,4 @@ class JarboeController
 
         return $isSearchable;
     } // end _isSearchable
-
 }

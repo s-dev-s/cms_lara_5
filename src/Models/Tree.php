@@ -97,7 +97,8 @@ class Tree extends \Baum\Node
     } // end getUrl
 
     //return url without location
-    public function getUrlNoLocation(){
+    public function getUrlNoLocation()
+    {
 
         if (!$this->_nodeUrl) {
             $this->_nodeUrl = $this->getGeneratedUrl();
@@ -109,16 +110,14 @@ class Tree extends \Baum\Node
     {
         $tags = $this->getCacheTags();
         if ($tags && $this->fileDefinition) {
-            $url = Cache::tags($tags)->rememberForever($this->fileDefinition."_".$this->id, function() {
-               return $this->getGeneratedUrlInCache();
+            $url = Cache::tags($tags)->rememberForever($this->fileDefinition."_".$this->id, function () {
+                return $this->getGeneratedUrlInCache();
             });
 
             return $url;
-
         } else {
-           return $this->getGeneratedUrlInCache();
+            return $this->getGeneratedUrlInCache();
         }
-
     } // end getGeneratedUrl
 
     private function getGeneratedUrlInCache()
@@ -143,7 +142,7 @@ class Tree extends \Baum\Node
         if ($tags) {
             $db = $this;
 
-            $countPages = Cache::tags($tags)->rememberForever("count_".$this->fileDefinition.$this->id,  function() {
+            $countPages = Cache::tags($tags)->rememberForever("count_".$this->fileDefinition.$this->id, function () {
                 return $this->children()->count();
             });
 
@@ -173,7 +172,8 @@ class Tree extends \Baum\Node
         return false;
     }
 
-    public function getCategory($id, $recursiveOnlyLastLevel = false) {
+    public function getCategory($id, $recursiveOnlyLastLevel = false)
+    {
 
         $this->recursiveOnlyLastLevel = $recursiveOnlyLastLevel;
         $node = \Tree::find($id);
@@ -188,7 +188,8 @@ class Tree extends \Baum\Node
         return $this->treeOptions;
     }
 
-   private function printCategories($parent_id, $level) {
+    private function printCategories($parent_id, $level)
+    {
         if (isset($this->treeMy[$parent_id])) {
             foreach ($this->treeMy[$parent_id] as $value) {
                 if (isset($this->treeMy[$value["id"]]) && $this->recursiveOnlyLastLevel) {
@@ -198,7 +199,7 @@ class Tree extends \Baum\Node
                 }
 
                 $paddingLeft = "";
-                for($i=0; $i<$level; $i++) {
+                for ($i=0; $i<$level; $i++) {
                     $paddingLeft .= "--";
                 }
 

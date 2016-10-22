@@ -1,9 +1,8 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
-
-class WysiwygField extends AbstractField 
+class WysiwygField extends AbstractField
 {
 
     public function isEditable()
@@ -32,7 +31,7 @@ class WysiwygField extends AbstractField
             }
         }
 
-        $wysiwyg = $this->getAttribute('wysiwyg', 'summernote');
+        //$wysiwyg = $this->getAttribute('wysiwyg', 'summernote');
 
         $input = \View::make('admin::tb.input_wysiwyg_redactor');
         $input->value = $this->getValue($row);
@@ -40,6 +39,7 @@ class WysiwygField extends AbstractField
         $input->toolbar = $this->getAttribute('toolbar');
         $input->comment = $this->getAttribute('comment');
         $input->inlineStyles = $this->getAttribute('inlineStyles');
+        $input->options = $this->getAttribute('options');
 
         $action = $this->definition['options']['action_url'];
         if (isset($this->definition['options']['action_url_tree'])) {
@@ -60,7 +60,7 @@ class WysiwygField extends AbstractField
             }
         }
         
-        $wysiwyg = $this->getAttribute('wysiwyg', 'summernote');
+        //$wysiwyg = $this->getAttribute('wysiwyg', 'summernote');
         
         $input = \View::make('admin::tb.tab_input_wysiwyg_redactor');
         $input->value = $this->getValue($row);
@@ -68,6 +68,8 @@ class WysiwygField extends AbstractField
         $input->toolbar = $this->getAttribute('toolbar');
         $input->tabs = $this->getPreparedTabs($row);
         $input->caption = $this->getAttribute('caption');
+        $input->inlineStyles = $this->getAttribute('inlineStyles');
+        $input->options = $this->getAttribute('options');
         
         $action = $this->definition['options']['action_url'];
         if (isset($this->definition['options']['action_url_tree'])) {
@@ -87,7 +89,7 @@ class WysiwygField extends AbstractField
         $tabs = $this->getAttribute('tabs');
         if ($tabs) {
             $field = $table .'.'. $this->getFieldName();
-            $db->where(function($query) use($field, $value, $tabs) {
+            $db->where(function ($query) use ($field, $value, $tabs) {
                 foreach ($tabs as $tab) {
                     $query->orWhere($field . $tab['postfix'], 'LIKE', '%'.$value.'%');
                 }
@@ -96,5 +98,4 @@ class WysiwygField extends AbstractField
             $db->where($table .'.'. $this->getFieldName(), 'LIKE', '%'.$value.'%');
         }
     } // end onSearchFilter
-
 }

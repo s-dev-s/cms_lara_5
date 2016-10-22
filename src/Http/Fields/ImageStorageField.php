@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
@@ -6,8 +6,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 
-
-class ImageStorageField extends AbstractField 
+class ImageStorageField extends AbstractField
 {
 
     public function isEditable()
@@ -57,5 +56,4 @@ class ImageStorageField extends AbstractField
     {
         return (!$value && $this->getAttribute('is_null')) ? null : $value;
     } // end prepareQueryValue
-
 }

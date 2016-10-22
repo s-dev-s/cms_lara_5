@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 
-
-class ImportHandler 
+class ImportHandler
 {
     
     protected $def;
@@ -125,7 +124,7 @@ class ImportHandler
         header('Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate');
         header('Last-Modified: '. $now .' GMT');
     
-        // force download  
+        // force download
         header('Content-Type: application/force-download');
         header('Content-Type: application/octet-stream');
         header('Content-Type: application/download');
@@ -146,5 +145,4 @@ class ImportHandler
             throw new \RuntimeException('Import not permitted');
         }
     } // end doCheckPermission
-    
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Handlers;
 
@@ -6,8 +6,7 @@ use Vis\Builder\JarboeController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
 
-
-class ViewHandler 
+class ViewHandler
 {
 
     protected $controller;
@@ -160,5 +159,4 @@ class ViewHandler
         
         return $actions->render();
     } // end fetchActions
-
 }

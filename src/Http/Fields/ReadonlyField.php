@@ -1,9 +1,8 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
-
-class ReadonlyField extends AbstractField 
+class ReadonlyField extends AbstractField
 {
 
     public function getEditInput($row = array())
@@ -26,5 +25,4 @@ class ReadonlyField extends AbstractField
         $table = $this->definition['db']['table'];
         $db->where($table .'.'. $this->getFieldName(), 'LIKE', '%'.$value.'%');
     } // end onSearchFilter
-    
 }

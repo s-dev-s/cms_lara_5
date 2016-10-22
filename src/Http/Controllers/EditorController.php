@@ -1,9 +1,9 @@
 <?php namespace Vis\Builder;
 
-use  Illuminate\Routing\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Response; 
+use Illuminate\Support\Facades\Response;
 
 class EditorController extends Controller
 {
@@ -15,13 +15,12 @@ class EditorController extends Controller
         $photo = Input::file('file');
 
         $rules = array(
-            'file'	=> 'required|image|max:25000',
+            'file'  => 'required|image|max:25000',
         );
 
         $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails())
-        {
-            return Response::json( array('status' => 'error', "errors_messages"=>$validator->messages()));
+        if ($validator->fails()) {
+            return Response::json(array('status' => 'error', "errors_messages"=>$validator->messages()));
         }
 
         $destinationPath = "storage/editor/fotos";
@@ -45,13 +44,12 @@ class EditorController extends Controller
         $file = Input::file('file');
 
         $rules = array(
-            'file'	=> 'required|max:25000',
+            'file'  => 'required|max:25000',
         );
 
         $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails())
-        {
-            return Response::json( array('status' => 'error', "errors_messages"=>$validator->messages()));
+        if ($validator->fails()) {
+            return Response::json(array('status' => 'error', "errors_messages"=>$validator->messages()));
         }
 
         $destinationPath = "storage/editor/files";
@@ -78,7 +76,7 @@ class EditorController extends Controller
         unset($imgs[1]);
 
         $imgRes = array();
-        foreach($imgs as $img) {
+        foreach ($imgs as $img) {
             $imgRes[] = "/storage/editor/fotos/".$img;
         }
 
@@ -103,6 +101,5 @@ class EditorController extends Controller
         $page = $model::find($id);
         $page->$field = $text;
         $page->save();
-
     }
 }

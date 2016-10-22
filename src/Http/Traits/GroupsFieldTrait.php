@@ -21,7 +21,6 @@ trait GroupsFieldTrait
             } else {
                 return "Поле неправильного  формата";
             }
-
         } else {
             return "Нет такого поля";
         }

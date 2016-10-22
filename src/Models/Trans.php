@@ -36,9 +36,10 @@ class Trans extends Model
         if (Cache::get('translations_cms')) {
             $array_translate = Cache::get('translations_cms');
         } else {
-
             $translations_get = DB::table("translations_phrases_cms")->leftJoin(
-                'translations_cms', 'translations_cms.id_translations_phrase', '=',
+                'translations_cms',
+                'translations_cms.id_translations_phrase',
+                '=',
                 'translations_phrases_cms.id'
             )
                 ->get(array("translate", "lang", "phrase"));

@@ -1,9 +1,8 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
-
-class TextareaField extends AbstractField 
+class TextareaField extends AbstractField
 {
 
     public function isEditable()
@@ -17,7 +16,7 @@ class TextareaField extends AbstractField
         $tabs = $this->getAttribute('tabs');
         if ($tabs) {
             $field = $table .'.'. $this->getFieldName();
-            $db->where(function($query) use($field, $value, $tabs) {
+            $db->where(function ($query) use ($field, $value, $tabs) {
                 foreach ($tabs as $tab) {
                     $query->orWhere($field . $tab['postfix'], 'LIKE', '%'.$value.'%');
                 }
@@ -31,5 +30,4 @@ class TextareaField extends AbstractField
     {
         return 'textarea';
     } // end getLabelClass
-
 }

@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
             $data = array(
                 "status" => "error",
                 "code" => $e->getCode(),
-                "message" => class_basename( $e ) . ' in ' . basename( $e->getFile() ) . ' line ' . $e->getLine() . ': ' . $e->getMessage(),
+                "message" => class_basename($e) . ' in ' . basename($e->getFile()) . ' line ' . $e->getLine() . ': ' . $e->getMessage(),
             );
 
             return response()->json($data, 500);

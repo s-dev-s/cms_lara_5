@@ -97,7 +97,7 @@ class TranslateController extends Controller
         Event::fire("translate.created", array($model));
 
         return Response::json(
-                            array(
+            array(
                                 "status" => "ok",
                                 "ok_messages" => "Фраза успешно добавлена")
         );
@@ -122,7 +122,6 @@ class TranslateController extends Controller
     public function doTranslate()
     {
         try {
-
             $lang = Input::get("lang");
             $phrase = Input::get("phrase");
 
@@ -145,16 +144,13 @@ class TranslateController extends Controller
             if (isset($translation->getResult()[0])) {
                 $arr_res = array("lang" => $lang, "text" => $translation->getResult()[0]);
                 return json_encode($arr_res);
-            }else{
+            } else {
                 return "error.No get results";
             }
-
-
         } catch (Yandex\Translate\Exception $e) {
             return $e->getMessage();
             // handle exception
         }
-
     }//end doTranslate
 
     /*

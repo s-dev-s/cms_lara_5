@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Facade;
 
-
 class Jarboe extends Facade
 {
 
@@ -15,5 +14,4 @@ class Jarboe extends Facade
     {
         return 'jarboe';
     } // end getFacadeAccessor
-
 }

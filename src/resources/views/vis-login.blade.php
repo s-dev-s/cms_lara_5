@@ -1,7 +1,9 @@
 @extends('admin::layouts.vis-login')
 
 @section('main')
+    <?
 
+    ?>
     <div id="main" role="main" style="background-image: url({{config('builder.login.background_url')}});">
         <div id="content" class="container">
 
@@ -16,7 +18,7 @@
                          </div>
                     </div>
                     <div class="b-bottom">
-                       {{Config::get('builder::login.bottom_block')}}
+                       {{Config::get('builder.login.bottom_block')}}
                     </div>
 
                     <div class="well no-padding">

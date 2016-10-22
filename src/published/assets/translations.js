@@ -2,8 +2,7 @@
 
 var Trans = {
 
-    handleSaveTrans: function()
-    {
+    handleSaveTrans: function () {
         var $checkoutForm = $('#form_page').validate({
             rules : {
                 phrase : {
@@ -17,17 +16,16 @@ var Trans = {
                 },
 
             },
-            errorPlacement : function(error, element) {
+            errorPlacement : function (error, element) {
                 error.insertAfter(element.parent());
             },
-            submitHandler: function(form) {
+            submitHandler: function (form) {
                 Trans.doSave();
             }
         });
     }, //handleSaveTrans
 
-    show_list: function (page, count_show)
-    {
+    show_list: function (page, count_show) {
 
         Trans.load_ajax("show");
 
@@ -54,25 +52,28 @@ var Trans = {
         });
     },
 
-    getCreateForm: function ()
-    {
+    getCreateForm: function () {
         $("#modal_form").modal('show');
         Trans.preloadPage();
-        $.post("/admin/translations_cms/create_pop", {},
+        $.post(
+            "/admin/translations_cms/create_pop",
+            {},
             function (data) {
                 $("#modal_form .modal-content").html(data);
                 Trans.handleSaveTrans();
-            });
+            }
+        );
     },
 
     //yandex autotranslate
-    getTranslate: function (phrase)
-    {
+    getTranslate: function (phrase) {
         $(".langs_input").each(function (index) {
             var lang = $(this).attr("name");
             if (phrase && lang) {
                 $(".langs_input[name=" + lang + "]").attr("placeholder", "Переводит...")
-                $.post("/admin/translations_cms/translate", {phrase: phrase, lang: lang},
+                $.post(
+                    "/admin/translations_cms/translate",
+                    {phrase: phrase, lang: lang},
                     function (data) {
 
                         $(".langs_input[name=" + data.lang + "]").attr("placeholder", "")
@@ -81,17 +82,19 @@ var Trans = {
                             $(".langs_input[name=" + data.lang + "]").val(data.text);
                         }
 
-                    }, "json");
+                    },
+                    "json"
+                );
             }
         });
     },
 
-    doSave: function ()
-    {
-        $.post("/admin/translations_cms/add_record", {data: $('#form_page').serialize()},
+    doSave: function () {
+        $.post(
+            "/admin/translations_cms/add_record",
+            {data: $('#form_page').serialize()},
             function (data) {
                 if (data.status == "ok") {
-
                     jQuery.smallBox({
                         title: data.ok_messages,
                         content: "",
@@ -103,7 +106,6 @@ var Trans = {
                     $("#modal_form").modal('hide');
                     Trans.show_list(1);
                 } else {
-
                     var mess_error = ""
                     $.each(data.errors_messages, function (key, value) {
                         mess_error += value + "<br>";
@@ -117,25 +119,27 @@ var Trans = {
                         timeout: 4000
                     });
                 }
-            }, "json");
+            },
+            "json"
+        );
     },
 
-    doDelete: function (this_id_pages)
-    {
-        $.post("/admin/translations_cms/del_record", {id: this_id_pages},
+    doDelete: function (this_id_pages) {
+        $.post(
+            "/admin/translations_cms/del_record",
+            {id: this_id_pages},
             function (data) {
                 Trans.show_list(1);
-            });
+            }
+        );
     },
 
-    preloadPage: function ()
-    {
+    preloadPage: function () {
         var preloadhtml = '<div id="table-preloader" class="text-align-center"><i class="fa fa-gear fa-4x fa-spin"></i></div>';
         $("#modal_form .modal-content").html(preloadhtml);
     },
 
-    load_ajax: function ($show)
-    {
+    load_ajax: function ($show) {
         if ($show == "show") {
             $(".load_ajax").show();
         } else {
@@ -154,11 +158,14 @@ $(document).on("change", '[name=dt_basic_length]', function () {
 $(document).on("submit", '#search_form', function () {
     var search_q = $("[type=search]").val();
 
-    $.get(window.location.pathname, {search_q: search_q, "page": 1},
+    $.get(
+        window.location.pathname,
+        {search_q: search_q, "page": 1},
         function (data) {
 
             $('#content_admin').html(data);
-        });
+        }
+    );
     return false;
 });
 
@@ -167,3 +174,4 @@ $(document).on('click', '.pagination a', function (e) {
     Trans.show_list($(this).attr('href').split('page=')[1]);
     e.preventDefault();
 });
+

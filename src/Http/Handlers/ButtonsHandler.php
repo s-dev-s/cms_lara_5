@@ -28,6 +28,6 @@ class ButtonsHandler
             }
         }
 
-      return $buttonsHtml;
+        return $buttonsHtml;
     }
 }

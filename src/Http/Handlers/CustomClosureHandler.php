@@ -255,7 +255,6 @@ class CustomClosureHandler
             $closure = $closure->bindTo($this);
             return $closure($formField, $file);
         }
-
     } // end onPhotoUpload
     
     public function onPhotoUploadFromWysiwyg($file)
@@ -301,5 +300,4 @@ class CustomClosureHandler
             return $closure($def);
         }
     } // end onDeleteButtonFetch
-
 }

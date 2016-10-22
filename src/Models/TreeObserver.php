@@ -1,6 +1,7 @@
 <?php namespace Vis\Builder;
 
-class TreeObserver {
+class TreeObserver
+{
 
     public function saving($model)
     {

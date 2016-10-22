@@ -38,5 +38,10 @@
         "psr-4": {
             "S-dev\\Builder\\": "src/"
         }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "php artisan vendor:publish --tag=public --force"
+        ]
     }
 }

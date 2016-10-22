@@ -7,43 +7,50 @@ return array(
         'tags' => array('tree'),
     ),
     'templates' => array(
-        'Контакты' => array(
+        'contacts' => array(
             'action' => 'ContactsController@showPage',
             'node_definition' => 'contacts',
             'check' => function() {
                 return true;
             },
+            'title' => 'Контакты'
         ),
-        'Новости' => array(
+        'news' => array(
             'action' => 'NewsController@showPages',
             'node_definition' => 'node',
             'check' => function() {
                 return true;
             },
-        ),
-        'Статьи' => array(
-            'action' => 'ArticlesController@showPages',
-            'node_definition' => 'node',
-            'check' => function() {
-                return true;
-            },
+            'title' => 'Новости'
         ),
 
-        'О нас' => array(
+        'about' => array(
             'action' => 'AboutController@showPage',
             'node_definition' => 'node',
             'check' => function() {
                 return true;
             },
+            'title' => "О нас"
         ),
 
-        'Главная' => array(
+        'article' => array(
+            'action' => 'ArticleController@showPage',
+            'node_definition' => 'node',
+            'check' => function() {
+                return true;
+            },
+            'title' => "Статья"
+        ),
+
+        'main' => array(
             'action' => 'HomeController@showPage',
             'node_definition' => 'node',
             'check' => function() {
                 return true;
             },
+            'title' => "Главная"
         ),
+
     ),
 
     'default' => array(

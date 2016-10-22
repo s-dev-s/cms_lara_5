@@ -7,7 +7,6 @@ use Vis\Builder\Helpers\URLify;
 use Yandex\Translate\Exception;
 use Yandex\Translate\Translator;
 
-
 class Jarboe
 {
     protected $controller;
@@ -16,7 +15,6 @@ class Jarboe
     protected function onInit($options)
     {
         $this->controller = new JarboeController($options);
-
     } // end onInit
 
     protected function onFinish()
@@ -53,7 +51,4 @@ class Jarboe
 
         return $controller;
     } // end tree
-
-
 }
-

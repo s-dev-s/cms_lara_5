@@ -1,12 +1,11 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
-
-class FileField extends AbstractField 
+class FileField extends AbstractField
 {
 
     public function isEditable()
@@ -32,7 +31,7 @@ class FileField extends AbstractField
 
         $valueJson = $this->getValue($row);
         if ($valueJson && $this->isJson($valueJson)) {
-          $filesArray = json_decode($valueJson);
+            $filesArray = json_decode($valueJson);
         }
 
         $input = View::make('admin::tb.input_'. $type);
@@ -53,7 +52,8 @@ class FileField extends AbstractField
         return $input->render();
     } // end getEditInput
 
-    private  function isJson($string) {
+    private function isJson($string)
+    {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
@@ -77,5 +77,4 @@ class FileField extends AbstractField
         
         return $html;
     } // end getListValue
-
 }

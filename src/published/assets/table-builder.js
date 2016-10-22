@@ -22,17 +22,16 @@ var TableBuilder = {
     onDoEdit: null,
     onDoCreate: null,
     onDoDelete: null,
+    tableEditorImg : null,
 
-    init: function(options)
-    {
+    init: function (options) {
 
         TableBuilder.options = TableBuilder.getOptions(options);
         TableBuilder.initSearchOnEnterPressed();
         TableBuilder.initSelect2Hider();
     }, // end init
 
-    optionsInit : function(options)
-    {
+    optionsInit : function (options) {
         TableBuilder.options = TableBuilder.getOptions(options);
     },
 
@@ -46,7 +45,43 @@ var TableBuilder = {
             langEditor = langCms;
         }
 
-        $( ".text_block" ).each(function( index ) {
+
+        $.FroalaEditor.DefineIcon('crop', {NAME: 'crop'});
+        $.FroalaEditor.RegisterCommand('crop', {
+            title: 'Image Crop',
+            focus: false,
+            undo: false,
+            refreshAfterCallback: false,
+            callback: function () {
+                var imgThis = this.image.get();
+                $('#modal_crop_img').modal("show");
+
+                var srcImg = imgThis.attr('src');
+                TableBuilder.tableEditorImg = imgThis;
+
+                $("#modal_crop_img #image").attr("src", "");
+                $("#modal_crop_img #image").attr("src", srcImg);
+                $("#modal_crop_img").css("top", $(window).scrollTop() + 20);
+
+                var $image = $('#image');
+                $image.cropper('destroy');
+                var result = $image.cropper({
+
+                    crop: function (data) {
+                        $(".width_crop").text(Math.round(data.width));
+                        $(".height_crop").text(Math.round(data.height));
+
+                    },
+                    built: function () {
+
+                    },
+                    // responsive : false
+                });
+                setTimeout('$("#modal_crop_img #image").attr("src", "' + srcImg + '")', 1000);
+            }
+        });
+
+        $(".text_block").each(function ( index ) {
 
             var option =  {
                 inlineMode: false,
@@ -57,11 +92,12 @@ var TableBuilder = {
                 imageManagerLoadURL: "/admin/load_image?_token=" + $("meta[name=csrf-token]").attr("content"),
                 imageDeleteURL: "/admin/delete_image?_token=" + $("meta[name=csrf-token]").attr("content"),
                 language: langEditor,
+                imageEditButtons: ['imageReplace', 'imageAlign', 'imageRemove', '|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', '-', 'imageDisplay', 'imageStyle', 'imageAlt', 'imageSize', 'crop']
             };
 
             if ($(this).attr("toolbar")) {
                 var toolbar = $(this).attr("toolbar");
-                var arrayToolbar = toolbar.split (",");
+                var arrayToolbar = toolbar.split(",");
                 arrayToolbar = $.map(arrayToolbar, $.trim);
                 option.toolbarButtons = arrayToolbar;
                 option.toolbarButtonsMD = arrayToolbar;
@@ -73,20 +109,25 @@ var TableBuilder = {
                 option.inlineStyles = JSON.parse($(this).attr("inlinestyles"))
             }
 
+            if ($(this).attr("options")) {
+                var optionsConfig = JSON.parse($(this).attr("options"));
+                for (var key in optionsConfig) {
+                    option[key] = optionsConfig[key];
+                }
+            }
+
             $(this).froalaEditor(option);
         });
 
         $("a[href='https://froala.com/wysiwyg-editor']").parent().remove();
     },
 
-    getActionUrl: function()
-    {
+    getActionUrl: function () {
         return TableBuilder.action_url ? TableBuilder.action_url : '/admin/handle/tree';
     }, // end getActionUrl
 
-    initSearchOnEnterPressed: function()
-    {
-        jQuery('.filters-row input').keypress(function(event) {
+    initSearchOnEnterPressed: function () {
+        jQuery('.filters-row input').keypress(function (event) {
             var keyCode   = event.keyCode ? event.keyCode : event.which;
             var enterCode = '13';
 
@@ -97,7 +138,7 @@ var TableBuilder = {
         });
     }, // end initSearchOnEnterPressed
 
-    getOptions: function(options) {
+    getOptions: function (options) {
         var defaultOptions = {
             lang: {},
             ident: null,
@@ -118,8 +159,7 @@ var TableBuilder = {
         return options;
     }, // end getOptions
 
-    checkOptions: function(options)
-    {
+    checkOptions: function (options) {
         var requiredOptions = [
             'ident',
             'table_ident',
@@ -127,9 +167,9 @@ var TableBuilder = {
             'action_url'
         ];
 
-        jQuery.each(requiredOptions, function(index, value) {
+        jQuery.each(requiredOptions, function (index, value) {
             if (typeof options[value] === null) {
-                alert('TableBuilder: ['+ value +'] is required option.' );
+                alert('TableBuilder: ['+ value +'] is required option.');
             }
         });
     }, // end checkOptions
@@ -142,8 +182,7 @@ var TableBuilder = {
         return ident;
     }, // end lang
 
-    search: function()
-    {
+    search: function () {
         TableBuilder.showProgressBar();
 
         var $form = jQuery('#'+ TableBuilder.options.table_ident);
@@ -155,43 +194,38 @@ var TableBuilder = {
         /* Because serializeArray() ignores unset checkboxes and radio buttons: */
         data = data.concat(
             $form.find('input[type=checkbox]:not(:checked)')
-                .map(function() {
+                .map(function () {
                     return {"name": this.name, "value": 0};
                 }).get()
         );
 
         var $posting = jQuery.post(TableBuilder.getActionUrl(), data);
 
-        $posting.done(function(response) {
+        $posting.done(function (response) {
             doAjaxLoadContent(location.href);
             // window.location.replace(window.location.origin + window.location.pathname + window.location.search);
         });
 
     }, // end search
 
-    showProgressBar: function()
-    {
+    showProgressBar: function () {
         jQuery('#'+TableBuilder.options.ident).find('.ui-overlay').fadeIn();
     }, // end showProgressBar
 
-    hideProgressBar: function()
-    {
+    hideProgressBar: function () {
         jQuery('#'+TableBuilder.options.ident).find('.ui-overlay').fadeOut();
     }, // end hideProgressBar
 
-    showFastEdit : function(thisElement)
-    {
+    showFastEdit : function (thisElement) {
         $(".fast-edit-buttons").hide();
         $(thisElement).parent().find(".fast-edit-buttons").show();
     },
 
-    closeFastEdit: function(context, type, response)
-    {
+    closeFastEdit: function (context, type, response) {
         var $editElem = jQuery(context).parent().hide();
     }, // end closeFastEdit
 
-    saveFastEdit: function(context, rowId, rowIdent)
-    {
+    saveFastEdit: function (context, rowId, rowIdent) {
         // TableBuilder.showProgressBar();
 
         var $context = jQuery(context).parent().parent();
@@ -207,39 +241,38 @@ var TableBuilder = {
 
         var $posting = jQuery.post(TableBuilder.getActionUrl(), data);
 
-        $posting.done(function(response) {
+        $posting.done(function (response) {
 
         });
     }, // end saveFastEdit
 
-    getUrlParameter: function(sParam)
-    {
+    getUrlParameter: function (sParam) {
         var sPageURL = window.location.search.substring(1);
         var sURLVariables = sPageURL.split('&');
-        for (var i = 0; i < sURLVariables.length; i++)
-        {
+        for (var i = 0; i < sURLVariables.length; i++) {
             var sParameterName = sURLVariables[i].split('=');
-            if (sParameterName[0] == sParam)
-            {
+            if (sParameterName[0] == sParam) {
                 return sParameterName[1];
             }
         }
     }, // end getUrlParameter
 
-    getCreateForm: function()
-    {
+    getCreateForm: function () {
 
         TableBuilder.showPreloader();
 
         // if ($(".table_form_create #modal_form").size() == 0) {
-        $.post(TableBuilder.getActionUrl(),{"query_type" : "show_add_form"},
-            function(data){
+        $.post(
+            TableBuilder.getActionUrl(),
+            {"query_type" : "show_add_form"},
+            function (data) {
                 $(".table_form_create").html(data);
                 jQuery(TableBuilder.form).modal('show');
                 TableBuilder.initFroalaEditor();
                 TableBuilder.hidePreloader();
                 TableBuilder.handleActionSelect();
-            });
+            }
+        );
         /* } else {
          jQuery(TableBuilder.form).modal('show');
          TableBuilder.hidePreloader();
@@ -247,29 +280,26 @@ var TableBuilder = {
 
     }, // end getCreateForm
 
-    initSelect2Hider: function()
-    {
-        jQuery('.modal-dialog').on('click', function() {
+    initSelect2Hider: function () {
+        jQuery('.modal-dialog').on('click', function () {
             jQuery('.select2-enabled[id^="many2many"]').select2("close");
             jQuery('.select2-hidden-accessible').hide();
         });
 
     }, // end initSelect2Hider
 
-    getCloneForm: function(id)
-    {
-        $.post( TableBuilder.getActionUrl(), {"query_type" : "clone_record", "id" : id})
-            .done(function( data ) {
+    getCloneForm: function (id) {
+        $.post(TableBuilder.getActionUrl(), {"query_type" : "clone_record", "id" : id})
+            .done(function ( data ) {
                 doAjaxLoadContent(location.href);
-            }).fail(function(xhr, ajaxOptions, thrownError) {
-            var errorResult = jQuery.parseJSON(xhr.responseText);
-            TableBuilder.showErrorNotification(errorResult.message);
-            TableBuilder.hidePreloader();
-        });
+            }).fail(function (xhr, ajaxOptions, thrownError) {
+                var errorResult = jQuery.parseJSON(xhr.responseText);
+                TableBuilder.showErrorNotification(errorResult.message);
+                TableBuilder.hidePreloader();
+            });
     },
 
-    handleStartLoad: function()
-    {
+    handleStartLoad: function () {
         var idPage = Core.urlParam('id');
         if ($.isNumeric(idPage)) {
             TableBuilder.getEditForm(idPage);
@@ -287,8 +317,7 @@ var TableBuilder = {
 
     }, // end handleStartLoad
 
-    getEditForm: function(id, context)
-    {
+    getEditForm: function (id, context) {
         var urlPage = "?id=" + id;
         window.history.pushState(urlPage, '', urlPage);
 
@@ -307,13 +336,13 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: data,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     jQuery(TableBuilder.form_wrapper).html(response.html);
                     TableBuilder.initFroalaEditor();
 
                     jQuery(TableBuilder.form_edit).modal('show').css("top", $(window).scrollTop());;
-                    jQuery(TableBuilder.form_edit).find('input[data-mask]').each(function() {
+                    jQuery(TableBuilder.form_edit).find('input[data-mask]').each(function () {
                         var $input = jQuery(this);
                         $input.mask($input.attr('data-mask'));
                     });
@@ -334,8 +363,7 @@ var TableBuilder = {
     }, // end getEditForm
 
 
-    getViewsStatistic : function (id, context)
-    {
+    getViewsStatistic : function (id, context) {
         var urlPage = "?views_statistic=" + id;
         window.history.pushState(urlPage, '', urlPage);
         TableBuilder.showPreloader();
@@ -349,7 +377,7 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: data,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     jQuery(TableBuilder.form_wrapper).html(response.html);
                     jQuery(TableBuilder.form_edit).modal('show').css("top", $(window).scrollTop());
@@ -370,8 +398,7 @@ var TableBuilder = {
 
     },
 
-    getRevisions: function(id, context)
-    {
+    getRevisions: function (id, context) {
         var urlPage = "?revision_page=" + id;
         window.history.pushState(urlPage, '', urlPage);
         TableBuilder.showPreloader();
@@ -385,7 +412,7 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: data,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     jQuery(TableBuilder.form_wrapper).html(response.html);
                     jQuery(TableBuilder.form_edit).modal('show').css("top", $(window).scrollTop());
@@ -404,8 +431,7 @@ var TableBuilder = {
         });
     },
 
-    getReturnHistory: function(id)
-    {
+    getReturnHistory: function (id) {
         var data = [
             {name: "query_type", value: "return_revisions"},
             {name: "id", value: id},
@@ -415,15 +441,13 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: data,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
-
                     TableBuilder.showSuccessNotification("Сохранено");
 
                     jQuery(TableBuilder.form_edit).modal('hide');
                     window.history.back();
                     return;
-
                 } else {
                     TableBuilder.showErrorNotification("Что-то пошло не так, попробуйте позже");
                 }
@@ -439,13 +463,12 @@ var TableBuilder = {
         });
     },
 
-    doDelete: function(id, context)
-    {
+    doDelete: function (id, context) {
         jQuery.SmartMessageBox({
             title : phrase["Удалить?"],
             content : phrase["Эту операцию нельзя будет отменить."],
             buttons : '[' + phrase["Нет"] + '][' + phrase["Да"] + ']'
-        }, function(ButtonPressed) {
+        }, function (ButtonPressed) {
             if (ButtonPressed === phrase["Да"]) {
                 TableBuilder.showPreloader();
 
@@ -454,10 +477,9 @@ var TableBuilder = {
                     url: TableBuilder.getActionUrl(),
                     data: { id: id, query_type: "delete_row", "__node": TableBuilder.getUrlParameter('node') },
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
 
                         if (response.status) {
-
                             TableBuilder.showSuccessNotification(phrase['Поле удалено успешно']);
                             jQuery('tr[id-row="'+id+'"]').remove();
                         } else {
@@ -477,19 +499,17 @@ var TableBuilder = {
                         TableBuilder.hidePreloader();
                     }
                 });
-
             }
 
         });
     }, // end doDelete
 
-    doEdit: function(id)
-    {
+    doEdit: function (id) {
         TableBuilder.showPreloader();
         TableBuilder.showFormPreloader(TableBuilder.form_edit);
 
-        $(TableBuilder.edit_form + " .fr-link-insert-layer input").each(function( index ) {
-            $( this ).removeAttr("name")
+        $(TableBuilder.edit_form + " .fr-link-insert-layer input").each(function ( index ) {
+            $(this).removeAttr("name")
         });
 
         var values = $(TableBuilder.edit_form).serializeArray();
@@ -510,13 +530,13 @@ var TableBuilder = {
         /* Because serializeArray() ignores unset checkboxes and radio buttons: */
         values = values.concat(
             jQuery(TableBuilder.edit_form).find('input[type=checkbox]:not(:checked)')
-                .map(function() {
+                .map(function () {
                     return {"name": this.name, "value": 0};
                 }).get()
         );
 
         var selectMultiple = [];
-        jQuery(TableBuilder.edit_form).find('select[multiple="multiple"]').each(function(i, value) {
+        jQuery(TableBuilder.edit_form).find('select[multiple="multiple"]').each(function (i, value) {
             if (!$(this).val()) {
                 selectMultiple.push({"name": this.name, "value": ''});
             }
@@ -527,12 +547,11 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: values,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
 
                 TableBuilder.hideFormPreloader(TableBuilder.form_edit);
 
                 if (response.id) {
-
                     TableBuilder.showSuccessNotification(phrase['Сохранено']);
                     $(document).height($(window).height());
                     if (TableBuilder.options.is_page_form) {
@@ -547,11 +566,9 @@ var TableBuilder = {
                     if (TableBuilder.onDoEdit) {
                         TableBuilder.onDoEdit(TableBuilder.getActionUrl());
                     }
-
                 } else {
-
                     var errors = '';
-                    jQuery(response.errors).each(function(key, val) {
+                    jQuery(response.errors).each(function (key, val) {
                         errors += val +'<br>';
                     });
 
@@ -568,15 +585,14 @@ var TableBuilder = {
         });
     }, // end doEdit
 
-    buildFiles : function()
-    {
-        $( ".file_multi" ).each(function( index ) {
+    buildFiles : function () {
+        $(".file_multi").each(function ( index ) {
             var ident = $(this).attr("nameident") ;
             TableBuilder.files[ident] = {};
         });
 
         var k = 0;
-        $( ".file_multi" ).each(function( index ) {
+        $(".file_multi").each(function ( index ) {
             var ident = $(this).attr("nameident");
             TableBuilder.files[ident][k] = $(this).attr("value");
             k++;
@@ -584,8 +600,7 @@ var TableBuilder = {
 
     },
 
-    removeInputValues: function(context)
-    {
+    removeInputValues: function (context) {
         jQuery(':input', context)
             .removeAttr('checked')
             .removeAttr('selected')
@@ -597,13 +612,12 @@ var TableBuilder = {
         jQuery('.state-success, .state-error', context).removeClass('state-success').removeClass('state-error');
     }, // end removeInputValues
 
-    doCreate: function()
-    {
+    doCreate: function () {
         TableBuilder.showPreloader();
         TableBuilder.showFormPreloader(TableBuilder.form);
 
-        $(TableBuilder.create_form + " .fr-link-insert-layer input").each(function( index ) {
-            $( this ).removeAttr("name")
+        $(TableBuilder.create_form + " .fr-link-insert-layer input").each(function ( index ) {
+            $(this).removeAttr("name")
         });
 
         var values = jQuery(TableBuilder.create_form).serializeArray();
@@ -624,7 +638,7 @@ var TableBuilder = {
         }
 
         var selectMultiple = [];
-        jQuery(TableBuilder.create_form).find('select[multiple="multiple"]').each(function(i, value) {
+        jQuery(TableBuilder.create_form).find('select[multiple="multiple"]').each(function (i, value) {
             if (!$(this).val()) {
                 selectMultiple.push({"name": this.name, "value": ''});
             }
@@ -640,7 +654,7 @@ var TableBuilder = {
         /* Because serializeArray() ignores unset checkboxes and radio buttons: */
         values = values.concat(
             jQuery(TableBuilder.create_form).find('input[type=checkbox]:not(:checked)')
-                .map(function() {
+                .map(function () {
                     return {"name": this.name, "value": 0};
                 }).get()
         );
@@ -650,7 +664,7 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: values,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 TableBuilder.hideFormPreloader(TableBuilder.form);
 
                 if (response.id) {
@@ -670,10 +684,9 @@ var TableBuilder = {
                     if (TableBuilder.onDoCreate) {
                         TableBuilder.onDoCreate(TableBuilder.getActionUrl());
                     }
-
                 } else {
                     var errors = '';
-                    jQuery(response.errors).each(function(key, val) {
+                    jQuery(response.errors).each(function (key, val) {
                         errors += val +'<br>';
                     });
                     TableBuilder.showBigErrorNotification(errors);
@@ -691,28 +704,23 @@ var TableBuilder = {
         });
     }, // end doCreate
 
-    showPreloader: function()
-    {
+    showPreloader: function () {
         jQuery(TableBuilder.preloader).show();
     }, // end showPreloader
 
-    hidePreloader: function()
-    {
+    hidePreloader: function () {
         jQuery(TableBuilder.preloader).hide();
     }, // end hidePreloader
 
-    showFormPreloader: function(context)
-    {
+    showFormPreloader: function (context) {
         jQuery(TableBuilder.form_preloader, context).show();
     }, // end showPreloader
 
-    hideFormPreloader: function(context)
-    {
+    hideFormPreloader: function (context) {
         jQuery(TableBuilder.form_preloader, context).hide();
     }, // end hidePreloader
 
-    uploadImage: function(context, ident)
-    {
+    uploadImage: function (context, ident) {
         var data = new FormData();
         data.append("image", context.files[0]);
         data.append('ident', ident);
@@ -730,9 +738,9 @@ var TableBuilder = {
         var $progress = jQuery(context).parent().parent().parent().parent().parent().find('.progress-bar');
 
         jQuery.ajax({
-            xhr: function() {
+            xhr: function () {
                 var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
+                xhr.upload.addEventListener("progress", function (evt) {
                     console.log(evt);
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total;
@@ -742,7 +750,7 @@ var TableBuilder = {
                     }
                 }, false);
 
-                xhr.addEventListener("progress", function(evt) {
+                xhr.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total;
                     }
@@ -756,13 +764,12 @@ var TableBuilder = {
             cache: false,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     $progress.width('0%');
 
                     $(context).parents(".picture_block").find('.tb-uploaded-image-container').html(response.html);
                     $(context).parents(".picture_block").find('[type=hidden]').val(response.data.sizes.original);
-
                 } else {
                     TableBuilder.showErrorNotification(phrase["Ошибка при загрузке изображения"]);
                 }
@@ -776,12 +783,10 @@ var TableBuilder = {
         });
     }, // end uploadImage
 
-    uploadMultipleImages: function(context, ident)
-    {
+    uploadMultipleImages: function (context, ident) {
         $(".no_photo").hide();
         var arr = context.files;
         for (var index = 0; index < arr.length; ++index) {
-
             var data = new FormData();
             data.append("image", context.files[index]);
             data.append('ident', ident);
@@ -831,7 +836,6 @@ var TableBuilder = {
                         $(context).parents(".multi_pictures").find(".tb-uploaded-image-container ul").append(response.html);
 
                         TableBuilder.setInputImages(context);
-
                     } else {
                         TableBuilder.showErrorNotification(phrase["Ошибка при загрузке изображения"]);
                     }
@@ -846,10 +850,9 @@ var TableBuilder = {
         }
     }, // end uploadMultipleImages
 
-    setInputImages : function(context)
-    {
+    setInputImages : function (context) {
         var arrImages = new Array();
-        $(context).parent().parent().parent().find('.tb-uploaded-image-container ul li img' ).each(function( index ) {
+        $(context).parent().parent().parent().find('.tb-uploaded-image-container ul li img').each(function ( index ) {
             arrImages.push($(this).attr("data_src_original"));
         });
         var jsonArray = JSON.stringify(arrImages);
@@ -857,16 +860,14 @@ var TableBuilder = {
         $(context).parent().parent().find("[type=hidden]").val(jsonArray);
     },
 
-    deleteImage: function(context)
-    {
+    deleteImage: function (context) {
         var contextFile = $(context).parent().parent().parent().parent().parent().find("[type=file]");
         var $li = $(context).parent().parent();
         $li.remove();
         TableBuilder.setInputImages(contextFile);
     }, // end deleteImage
 
-    deleteSingleImage: function(ident, context)
-    {
+    deleteSingleImage: function (ident, context) {
         var $imageWrapper = $(context).parent().parent();
         var $imageInput = $(context).parent().parent().parent().parent().find("input[type=hidden]");
         $imageWrapper.hide();
@@ -874,8 +875,7 @@ var TableBuilder = {
 
     }, // end deleteSingleImage
 
-    doChangeSortingDirection: function(ident, context)
-    {
+    doChangeSortingDirection: function (ident, context) {
         // TableBuilder.showPreloader();
 
         var $context = jQuery(context);
@@ -896,7 +896,7 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             cache: false,
             dataType: "json",
-            success: function(response) {
+            success: function (response) {
                 doAjaxLoadContent(window.location.href);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -906,8 +906,7 @@ var TableBuilder = {
         });
     }, // end doChangeSortingDirection
 
-    uploadFile: function(context, ident)
-    {
+    uploadFile: function (context, ident) {
         var data = new FormData();
         data.append("file", context.files[0]);
         data.append('query_type', 'upload_file');
@@ -921,13 +920,12 @@ var TableBuilder = {
             cache: false,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     $(context).parent().next().val(response.long_link);
 
                     var html = '<a href="'+ response.link +'" target="_blank">Скачать</a>';
                     $(context).parent().parent().next().html(html);
-
                 } else {
                     TableBuilder.showErrorNotification("Ошибка при загрузке файла");
                 }
@@ -942,8 +940,7 @@ var TableBuilder = {
     }, // end uploadFile
 
 
-    uploadFileMulti : function(context, ident)
-    {
+    uploadFileMulti : function (context, ident) {
         var arr = context.files;
         for (var index = 0; index < arr.length; ++index) {
             var data = new FormData();
@@ -954,9 +951,9 @@ var TableBuilder = {
             var $progress = jQuery(context).parent().parent().parent().parent().parent().find('.progress-bar');
 
             jQuery.ajax({
-                xhr: function() {
+                xhr: function () {
                     var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function(evt) {
+                    xhr.upload.addEventListener("progress", function (evt) {
                         console.log(evt);
                         if (evt.lengthComputable) {
                             var percentComplete = evt.loaded / evt.total;
@@ -966,7 +963,7 @@ var TableBuilder = {
                         }
                     }, false);
 
-                    xhr.addEventListener("progress", function(evt) {
+                    xhr.addEventListener("progress", function (evt) {
                         if (evt.lengthComputable) {
                             var percentComplete = evt.loaded / evt.total;
                         }
@@ -980,9 +977,8 @@ var TableBuilder = {
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function(response) {
+                success: function (response) {
                     if (response.status) {
-
                         $progress.width('0%');
                         var html = '<li>' + response.short_link + '<a href="'+ response.link +'" target="_blank" path="'+response.long_link+'">Скачать</a> <a class="delete" onclick="TableBuilder.doDeleteFile(this)">Удалить</a></li>';
 
@@ -1005,10 +1001,9 @@ var TableBuilder = {
         }
     }, // end uploadFileMulti
 
-    doSetInputFiles : function(context)
-    {
+    doSetInputFiles : function (context) {
         var arrFiles = new Array();
-        $(context).find('li a' ).each(function( index ) {
+        $(context).find('li a').each(function ( index ) {
             if ($(this).attr("path") != null) {
                 arrFiles.push($(this).attr("path"));
             }
@@ -1020,8 +1015,7 @@ var TableBuilder = {
         $(context).parent().parent().parent().find("[type=hidden]").val(jsonArray);
     },
 
-    doDeleteFile : function(context)
-    {
+    doDeleteFile : function (context) {
         var ul = $(context).parent().parent();
         $(context).parent().remove();
         TableBuilder.doSetInputFiles(ul);
@@ -1029,20 +1023,18 @@ var TableBuilder = {
         return false;
     },
 
-    doSortFileUpload : function ()
-    {
+    doSortFileUpload : function () {
         $('.uploaded-files ul').sortable(
             {
                 items: "> li",
-                update: function( event, ui ) {
+                update: function ( event, ui ) {
                     TableBuilder.doSetInputFiles($(this));
                 }
             }
         );
     },
 
-    showErrorNotification: function(message)
-    {
+    showErrorNotification: function (message) {
         jQuery.smallBox({
             title : message,
             content : "",
@@ -1053,8 +1045,7 @@ var TableBuilder = {
         });
     }, // end showErrorNotification
 
-    showSuccessNotification: function(message)
-    {
+    showSuccessNotification: function (message) {
         jQuery.smallBox({
             title : message,
             content : "",
@@ -1064,8 +1055,7 @@ var TableBuilder = {
         });
     }, // end showSuccessNotification
 
-    setPerPageAmount: function(perPage)
-    {
+    setPerPageAmount: function (perPage) {
         TableBuilder.showProgressBar();
 
         var data = {
@@ -1075,14 +1065,13 @@ var TableBuilder = {
         };
 
         var $posting = jQuery.post(TableBuilder.getActionUrl(), data);
-        $posting.done(function(response) {
+        $posting.done(function (response) {
             window.location.replace(window.location.origin + window.location.pathname + window.location.search);
             //window.location.replace(response.url);
         });
     }, // end setPerPageAmount
 
-    doExport: function(type)
-    {
+    doExport: function (type) {
         TableBuilder.showPreloader();
 
         var $iframe = jQuery("#submiter");
@@ -1092,7 +1081,7 @@ var TableBuilder = {
         values.push({ name: 'query_type', value: "export" });
 
         var out = new Array();
-        jQuery.each(values, function(index, val) {
+        jQuery.each(values, function (index, val) {
             out.push(val['name'] +'='+ val['value']);
         });
 
@@ -1107,13 +1096,11 @@ var TableBuilder = {
         TableBuilder.hidePreloader();
     }, // end doExport
 
-    flushStorage: function()
-    {
+    flushStorage: function () {
         TableBuilder.storage = {};
     }, // end flushStorage
 
-    showBigErrorNotification: function(errors)
-    {
+    showBigErrorNotification: function (errors) {
         jQuery.bigBox({
             content : errors,
             color   : "#C46A69",
@@ -1121,8 +1108,7 @@ var TableBuilder = {
         });
     }, // end showBigErrorNotification
 
-    doImport: function(context, type, url)
-    {
+    doImport: function (context, type) {
         TableBuilder.showPreloader();
 
         var data = new FormData();
@@ -1130,25 +1116,20 @@ var TableBuilder = {
         data.append('type', type);
         data.append('query_type', 'import');
 
-        if (url == undefined) {
-            url = TableBuilder.getActionUrl();
-        }
-
         jQuery.SmartMessageBox({
             title : "Произвести импорт?",
             content : "Результат импорта нельзя отменить",
             buttons : '[Нет][Да]'
-        }, function(ButtonPressed) {
+        }, function (ButtonPressed) {
             if (ButtonPressed === "Да") {
-
                 jQuery.ajax({
                     data: data,
                     type: "POST",
-                    url: url,
+                    url: TableBuilder.getActionUrl(),
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.status) {
                             TableBuilder.showSuccessNotification('Импорт прошел успешно');
                         } else {
@@ -1156,7 +1137,7 @@ var TableBuilder = {
                                 TableBuilder.showErrorNotification('Что-то пошло не так');
                             } else {
                                 var errors = '';
-                                jQuery(response.errors).each(function(key, val) {
+                                jQuery(response.errors).each(function (key, val) {
                                     errors += val +'<br>';
                                 });
                                 TableBuilder.showBigErrorNotification(errors);
@@ -1171,15 +1152,13 @@ var TableBuilder = {
                         TableBuilder.hidePreloader();
                     }
                 });
-
             } else {
                 TableBuilder.hidePreloader();
             }
         });
     }, // end doImport
 
-    doDownloadImportTemplate: function(type)
-    {
+    doDownloadImportTemplate: function (type) {
         TableBuilder.showPreloader();
 
         var $iframe = jQuery("#submiter");
@@ -1195,16 +1174,14 @@ var TableBuilder = {
         TableBuilder.hidePreloader();
     }, // end doDownloadImportTemplate
 
-    doSelectAllMultiCheckboxes: function(context)
-    {
+    doSelectAllMultiCheckboxes: function (context) {
         var isChecked = jQuery('input', context).is(':checked');
         var $multiActionCheckboxes = jQuery('.multi-checkbox input');
 
         $multiActionCheckboxes.prop('checked', isChecked);
     }, // end doSelectAllMultiCheckboxes
 
-    doMultiActionCall: function(type)
-    {
+    doMultiActionCall: function (type) {
         TableBuilder.showPreloader();
 
         var values = jQuery('#'+ TableBuilder.options.table_ident).serializeArray();
@@ -1217,10 +1194,10 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: values,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     if (response.is_hide_rows) {
-                        jQuery(response.ids).each(function(key, val) {
+                        jQuery(response.ids).each(function (key, val) {
                             jQuery('tr[id-row="'+ val +'"]', '#'+ TableBuilder.options.table_ident).remove();
                         });
                     }
@@ -1231,7 +1208,7 @@ var TableBuilder = {
                         TableBuilder.showErrorNotification('Что-то пошло не так');
                     } else {
                         var errors = '';
-                        jQuery(response.errors).each(function(key, val) {
+                        jQuery(response.errors).each(function (key, val) {
                             errors += val +'<br>';
                         });
                         TableBuilder.showBigErrorNotification(errors);
@@ -1249,8 +1226,7 @@ var TableBuilder = {
         });
     }, // end doMultiActionCall
 
-    doMultiActionCallWithOption: function(context, type, option)
-    {
+    doMultiActionCallWithOption: function (context, type, option) {
         TableBuilder.showPreloader();
 
         var values = jQuery('#'+ TableBuilder.options.table_ident).serializeArray();
@@ -1264,12 +1240,12 @@ var TableBuilder = {
             url: TableBuilder.getActionUrl(),
             data: values,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 jQuery(context).parent().parent().parent().removeClass('open');
 
                 if (response.status) {
                     if (response.is_hide_rows) {
-                        jQuery(response.ids).each(function(key, val) {
+                        jQuery(response.ids).each(function (key, val) {
                             jQuery('tr[id-row="'+ val +'"]', '#'+ TableBuilder.options.table_ident).remove();
                         });
                     }
@@ -1280,7 +1256,7 @@ var TableBuilder = {
                         TableBuilder.showErrorNotification(phrase['Что-то пошло не так, попробуйте позже']);
                     } else {
                         var errors = '';
-                        jQuery(response.errors).each(function(key, val) {
+                        jQuery(response.errors).each(function (key, val) {
                             errors += val +'<br>';
                         });
                         TableBuilder.showBigErrorNotification(errors);
@@ -1298,14 +1274,13 @@ var TableBuilder = {
         });
     }, // end doMultiActionCallWithOption
 
-    saveOrder: function(order)
-    {
+    saveOrder: function (order) {
         jQuery.ajax({
             type: "POST",
             url: TableBuilder.getActionUrl(),
             data: { order: order, params: window.location.search, query_type: 'change_order' },
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     TableBuilder.showSuccessNotification(phrase['Порядок следования изменен']);
                 } else {
@@ -1314,7 +1289,6 @@ var TableBuilder = {
                     } else {
                         TableBuilder.showErrorNotification(phrase['Что-то пошло не так, попробуйте позже']);
                     }
-
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -1326,14 +1300,13 @@ var TableBuilder = {
         });
     }, // end saveOrder
 
-    openImageStorageModal: function(context, storageTypeSelect)
-    {
+    openImageStorageModal: function (context, storageTypeSelect) {
         jQuery.ajax({
             type: "POST",
             url: TableBuilder.getActionUrl(),
             data: { query_type: 'image_storage', storage_type: 'show_modal', "__node": TableBuilder.getUrlParameter('node'), storage_type_select: storageTypeSelect },
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
 
                 if (response.status) {
                     $(TableBuilder.image_storage_wrapper).html(response.html);
@@ -1355,20 +1328,18 @@ var TableBuilder = {
         });
     }, // end openImageStorageModal
 
-    closeImageStorageModal: function()
-    {
+    closeImageStorageModal: function () {
         $('.image_storage_wrapper').hide();
         $('.superbox-modal-hide').removeClass('superbox-modal-hide').show();
     }, // end closeImageStorageModal
 
-    openFileStorageModal: function(context)
-    {
+    openFileStorageModal: function (context) {
         jQuery.ajax({
             type: "POST",
             url: TableBuilder.getActionUrl(),
             data: { query_type: 'file_storage', storage_type: 'show_modal', "__node": TableBuilder.getUrlParameter('node') },
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
 
                 if (response.status) {
                     $(TableBuilder.image_storage_wrapper).html(response.html);
@@ -1389,13 +1360,11 @@ var TableBuilder = {
         });
     }, // end openFileStorageModal
 
-    reLoadTable : function ()
-    {
+    reLoadTable : function () {
         //  alert(window.location.href);
     }, //end reLoadTable
 
-    addGroup : function(context)
-    {
+    addGroup : function (context) {
         var sectionGroup = $(context).parent().find(".section_group").first().clone();
         $(sectionGroup).find("input, textarea").val("");
         $(sectionGroup).find(".tb-uploaded-image-container").html("<ul class='dop_foto'></ul>");
@@ -1404,8 +1373,7 @@ var TableBuilder = {
         $(context).parent().find(".other_section").append(sectionGroup);
     },
 
-    deleteGroup : function(context)
-    {
+    deleteGroup : function (context) {
         var sizeGroup = $(context).parent().parent().parent().find(".section_group").size();
         var sectionGroup = $(context).parent().parent();
         if (sizeGroup == 1) {
@@ -1416,30 +1384,28 @@ var TableBuilder = {
         }
     },
 
-    handleActionSelect : function()
-    {
+    handleActionSelect : function () {
 
         var selectAction = $("select.action");
         if (selectAction.size() != 0) {
             var value = selectAction.val();
             TableBuilder.checkActionSelect(value);
 
-            selectAction.change(function(){
+            selectAction.change(function () {
                 var value = selectAction.val();
                 TableBuilder.checkActionSelect(value);
             });
         }
     },
 
-    checkActionSelect : function(value)
-    {
+    checkActionSelect : function (value) {
         $("section.section_field").hide();
         $("section.section_field." + value).show();
     }
 
 };
 
-$(window).load(function() {
+$(window).load(function () {
     TableBuilder.initFroalaEditor();
     TableBuilder.handleStartLoad();
     $(document).on('click', 'a.node_link', function (e) {
@@ -1453,4 +1419,5 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+
 

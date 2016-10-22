@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Vis\Builder;
 
@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Config;
-
 
 class TBTreeController extends \Controller
 {
@@ -103,7 +102,7 @@ class TBTreeController extends \Controller
 
         $this->doFlushTreeStructureCache();
 
-        return Response::json($result);   
+        return Response::json($result);
     } // end doEditNode
     
     public function doDeleteNode()
@@ -116,7 +115,7 @@ class TBTreeController extends \Controller
         
         return Response::json(array(
             'status' => $status
-        ));   
+        ));
     } // end doDeleteNode
 
     public function handleTree()
@@ -175,8 +174,8 @@ class TBTreeController extends \Controller
         $item = Tree::find($item->id);
         
         $data = array(
-            'status' => true, 
-            'item' => $item, 
+            'status' => true,
+            'item' => $item,
             'parent_id' => $root->id
         );
         return Response::json($data);
@@ -223,7 +222,7 @@ class TBTreeController extends \Controller
         $this->doFlushTreeStructureCache();
         
         return Response::json(array(
-            'status' => true, 
+            'status' => true,
         ));
     } // end doCreateNode
     
@@ -242,5 +241,4 @@ class TBTreeController extends \Controller
         
         $this->doFlushTreeStructureCache();
     } // end doUpdateNode
-
 }

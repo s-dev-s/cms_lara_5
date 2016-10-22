@@ -2,7 +2,8 @@
 
 use Cartalyst\Sentinel\Users\EloquentUser;
 
-class User extends EloquentUser{
+class User extends EloquentUser
+{
 
     protected $table = 'users';
 
@@ -21,5 +22,4 @@ class User extends EloquentUser{
     {
         return $this->first_name." ".$this->last_name;
     }
-    
 }

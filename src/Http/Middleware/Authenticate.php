@@ -34,19 +34,17 @@ class Authenticate
             }
             //check access
             $user = Sentinel::getUser();
-            if(!$user->hasAccess(['admin.access'])) {
-                Session::flash ("login_not_found", "Нет прав на вход в админку");
+            if (!$user->hasAccess(['admin.access'])) {
+                Session::flash("login_not_found", "Нет прав на вход в админку");
                 Sentinel::logout();
 
-                return Redirect::route ("login_show");
+                return Redirect::route("login_show");
             }
-
         } catch (\Cartalyst\Sentinel\Checkpoints\NotActivatedException $e) {
-
-            Session::flash ("login_not_found", "Пользователь не активирован");
+            Session::flash("login_not_found", "Пользователь не активирован");
             Sentinel::logout();
             
-            return Redirect::route ("login_show");
+            return Redirect::route("login_show");
         }
 
         return $next($request);

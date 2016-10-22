@@ -73,11 +73,11 @@ class BuilderServiceProvider extends ServiceProvider
 
     private function registerCommands()
     {
-        $this->app->singleton('command.admin.install', function($app) {
+        $this->app->singleton('command.admin.install', function ($app) {
             return new InstallCommand();
         });
 
-        $this->app->singleton('command.admin.generatePassword', function($app) {
+        $this->app->singleton('command.admin.generatePassword', function ($app) {
             return new GeneratePassword();
         });
 
@@ -94,6 +94,3 @@ class BuilderServiceProvider extends ServiceProvider
         ];
     }
 }
-     
-            
-

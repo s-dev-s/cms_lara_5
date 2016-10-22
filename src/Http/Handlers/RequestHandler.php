@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Vis\Builder\Revision;
 
-class RequestHandler 
+class RequestHandler
 {
     protected $controller;
 
@@ -105,7 +105,6 @@ class RequestHandler
 
     protected function handleMultiUploadPictures()
     {
-
     }
     
     protected function handleManyToManyAjaxSearch()
@@ -549,7 +548,7 @@ class RequestHandler
         return array(
            'showList' => $this->controller->view->showList(),
           //  $this->controller->view->showEditForm()
-        );    
+        );
     } // end handleShowList
     
     protected function handleShowEditFormPageAction($id = false)
@@ -595,6 +594,4 @@ class RequestHandler
         $sessionPath = 'table_builder.'.$definitionName.'.filters';
         Session::put($sessionPath, $newFilters);
     } // end _prepareSearchFilters
-    
-
 }

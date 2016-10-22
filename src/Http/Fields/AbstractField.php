@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 
-
-abstract class AbstractField 
+abstract class AbstractField
 {
     protected $fieldName;
     protected $attributes;
@@ -124,7 +123,6 @@ abstract class AbstractField
     public function getReplaceStr($row)
     {
         if ($this->getAttribute('result_show')) {
-
             $arrParam = explode("%", $this->getAttribute('result_show'));
 
             foreach ($arrParam as $k => $val) {
@@ -135,7 +133,6 @@ abstract class AbstractField
 
             return implode("", $arrParam);
         }
-
     } // end getListValue
 
     public function getEditInput($row = array())
@@ -170,7 +167,7 @@ abstract class AbstractField
         }
         
         $type = $this->getAttribute('type');
-        
+
         $input = View::make('admin::tb.tab_input_'. $type);
         $input->value = $this->getValue($row);
         $input->name  = $this->getFieldName();
@@ -276,19 +273,20 @@ abstract class AbstractField
         $data = Session::all();
 
         if (!Session::has($table_name.'.'.$field_name)) {
-
             if ($field_bd && !Schema::hasColumn($table_name, $field_name)) {
                 Session::push($table_name . '.' . $field_name, 'created');
 
                 @list($field, $param) = explode("|", $field_bd);
 
-                Schema::table($table_name,
-                function ($table) use ($field_name, $field, $param) {
-                    $field_add = $table->$field($field_name);
-                    if ($param) {
-                        $field_add->length($param);
+                Schema::table(
+                    $table_name,
+                    function ($table) use ($field_name, $field, $param) {
+                        $field_add = $table->$field($field_name);
+                        if ($param) {
+                            $field_add->length($param);
+                        }
                     }
-                });
+                );
             } else {
                 Session::push($table_name . '.' . $field_name, 'created');
             }
@@ -386,5 +384,4 @@ abstract class AbstractField
     } // end getRowColor
 
     abstract public function onSearchFilter(&$db, $value);
-    
 }

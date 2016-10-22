@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\View;
 
-class TextField extends AbstractField 
+class TextField extends AbstractField
 {
 
     public function isEditable()
@@ -16,7 +16,7 @@ class TextField extends AbstractField
         $tabs = $this->getAttribute('tabs');
         if ($tabs) {
             $field = $table .'.'. $this->getFieldName();
-            $db->where(function($query) use($field, $value, $tabs) {
+            $db->where(function ($query) use ($field, $value, $tabs) {
                 foreach ($tabs as $tab) {
                     $query->orWhere($field . $tab['postfix'], 'LIKE', '%'.$value.'%');
                 }
@@ -70,7 +70,6 @@ class TextField extends AbstractField
     public function getListValue($row)
     {
         if ($this->getAttribute('fast_edit')) {
-
             $html = "<p>".parent::getListValue($row)."</p>";
             return $html;
         }

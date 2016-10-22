@@ -74,7 +74,7 @@
                 source: [
                 @set ('tpls' , Config::get('builder.' . $treeName . '.templates'))
                 @foreach ($tpls as $capt => $tpl)
-                    { value: '{{$capt}}', text: '{{$capt}}' },
+                    { value: '{{$capt}}', text: '{{isset($tpl['title']) ? $tpl['title'] : $capt}}' },
                 @endforeach
                 ],
                 display: function(value, response) {

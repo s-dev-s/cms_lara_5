@@ -1,9 +1,8 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
-
-class CustomField extends AbstractField 
+class CustomField extends AbstractField
 {
 
     public function onSearchFilter(&$db, $value)
@@ -52,5 +51,4 @@ class CustomField extends AbstractField
             $this->handler->onSelectCustomValue($db);
         }
     } // end onSelectValue
-
 }

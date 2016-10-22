@@ -1,8 +1,8 @@
 <?php
 
-View::composer(array('partials.header'), function($view) {
+View::composer(array('partials.header'), function ($view) {
 
-    $menu = Cache::tags(array('tree'))->rememberForever('menuProduct', function() {
+    $menu = Cache::tags(array('tree'))->rememberForever('menuProduct', function () {
         $menu = Tree::isMenu()->get();
 
         return $menu;
@@ -11,9 +11,9 @@ View::composer(array('partials.header'), function($view) {
     $view->with('menu', $menu);
 });
 
-View::composer(array('partials.footer'), function($view) {
+View::composer(array('partials.footer'), function ($view) {
 
-    $menu = Cache::tags(array('tree'))->rememberForever('menuProduct', function() {
+    $menu = Cache::tags(array('tree'))->rememberForever('menuProduct', function () {
         $menu = Tree::isMenu()->get();
 
         return $menu;
@@ -23,7 +23,7 @@ View::composer(array('partials.footer'), function($view) {
 });
 
 
-View::composer('partials.breadcrumbs', function($view) {
+View::composer('partials.breadcrumbs', function ($view) {
 
     if (!isset($view->getData()['page'])) {
         return "Не передан параметр";
@@ -31,7 +31,7 @@ View::composer('partials.breadcrumbs', function($view) {
     $page = $view->getData()['page'];
 
     //if node
-    if( get_class($page) == "Tree" || get_class($page) == "NewsTree") {
+    if (get_class($page) == "Tree" || get_class($page) == "NewsTree") {
         $breadcrumbs = new Breadcrumbs($page);
     } else {
         $node = $page->getNode();

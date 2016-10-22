@@ -1,12 +1,11 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
 
-
-class CheckboxField extends AbstractField 
+class CheckboxField extends AbstractField
 {
 
     public function isEditable()
@@ -98,5 +97,4 @@ class CheckboxField extends AbstractField
 
         return $value;
     } // end getValue
-    
 }

@@ -70,14 +70,38 @@ class BaseModel extends Eloquent
 
     public function getDate()
     {
-        return Util::getDateOnly($this->created_at);
+        $date = strtotime($this->created_at);
+
+        return date("d", $date)." ".$this->getMonth($this->created_at)." ".date("Y", $date);
     } // end getCreatedDate
+
+    public function getMonth($date)
+    {
+
+        $month = [
+            '1' => 'Января',
+            '2' => 'Февраля',
+            '3' => 'Марта',
+            '4' => 'Апреля',
+            '5' => 'Мая',
+            '6' => 'Июня',
+            '7' => 'Июля',
+            '8' => 'Августа',
+            '9' => 'Сентября',
+            '10' => 'Октября',
+            '11' => 'Ноября',
+            '12' => 'Декабря'
+        ];
+
+        return  __($month[date("n", strtotime($date))]);
+    }
+
 
     /*
      * filter active page
      * @return object query
      */
-    public  static function  scopeActive($query)
+    public static function scopeActive($query)
     {
         return $query->where('is_active', '1');
     }
@@ -86,7 +110,7 @@ class BaseModel extends Eloquent
      * order query priority asc
      * @return object query
      */
-    public  static function  scopeOrderPriority($query)
+    public static function scopeOrderPriority($query)
     {
         return $query->orderBy("priority", "asc");
     }
@@ -98,7 +122,7 @@ class BaseModel extends Eloquent
      * @param integer $id this id page
      * @return object
      */
-    public  function scopePageInfo($query, $slug, $id)
+    public function scopePageInfo($query, $slug, $id)
     {
         $page = $query->where("id", $id)->active()->first();
 
@@ -116,7 +140,7 @@ class BaseModel extends Eloquent
     {
         $next_page = self::where("is_active", "1")
             ->where("priority", '>', $this->priority)->where("id", "!=", $this->id)
-            ->orderBy("priority","asc")
+            ->orderBy("priority", "asc")
             ->orderBy("id", "desc")
             ->first();
 
@@ -124,7 +148,7 @@ class BaseModel extends Eloquent
         if (!$next_page) {
             $next_page = self::where("is_active", "1")
                 ->where("id", "!=", $this->id)
-                ->orderBy("priority","asc")
+                ->orderBy("priority", "asc")
                 ->orderBy("id", "asc")
                 ->first();
         }
@@ -145,7 +169,7 @@ class BaseModel extends Eloquent
         if (!$prev_page) {
             $prev_page = self::where("is_active", "1")
                 ->where("id", "!=", $this->id)
-                ->orderBy("priority","desc")
+                ->orderBy("priority", "desc")
                 ->orderBy("id", "desc")
                 ->first();
         }
@@ -164,7 +188,7 @@ class BaseModel extends Eloquent
 
         //search last segment not url page
         foreach ($segments as $segment) {
-            if($segment != $this->getSlug().'-'. $this->id) {
+            if ($segment != $this->getSlug().'-'. $this->id) {
                 $nodeSlug = $segment;
             }
         }

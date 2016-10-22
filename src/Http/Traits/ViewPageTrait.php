@@ -12,5 +12,4 @@ trait ViewPageTrait
            "id_record" => $this->id
         ));
     }
-
 }

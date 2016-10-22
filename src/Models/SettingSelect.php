@@ -22,5 +22,4 @@ class SettingSelect extends Eloquent
             Setting::reCacheSettings();
         }
     } //end doDelete
-
 }

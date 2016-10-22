@@ -10,7 +10,6 @@ trait QuickEditTrait
         $admin = Sentry::findGroupByName('admin');
 
         if (Sentry::check() && Sentry::getUser()->inGroup($admin)) {
-
             $pageEditor = $this;
             $fieldEdit = "editor_init_".get_class($pageEditor)."_".$field."_".$pageEditor->id;
 
@@ -18,7 +17,5 @@ trait QuickEditTrait
         } else {
             return $this->$field;
         }
-
     }
-
 }

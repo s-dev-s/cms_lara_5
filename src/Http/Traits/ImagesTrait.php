@@ -18,7 +18,8 @@ trait ImagesTrait
         return  '<img src = "'.$img_res.'" title = "'.$this->title.'" alt = "'.$this->title.'">';
     } // end getImg
 
-    public function getImgPath($width = '', $height = '', $options = array()) {
+    public function getImgPath($width = '', $height = '', $options = array())
+    {
 
         if ($this->picture) {
             $picture = $this->picture;
@@ -59,9 +60,34 @@ trait ImagesTrait
             if ($paramImg) {
                 $imagesRes[] = glide($imgOne, $paramImg);
             } else {
-                $imagesRes[] = "/".$imgOne;
+                $imagesRes[] = "/" . $imgOne;
             }
+        }
 
+        return $imagesRes;
+    }
+
+    /**
+     * get array additional pictures with original img in key
+     *
+     * @param string $nameField
+     * @param string $paramImg
+     */
+    public function getOtherImgWithOriginal($nameField = "additional_pictures", $paramImg = "")
+    {
+        if (!$this->$nameField) {
+            return;
+        }
+
+        $images = json_decode($this->$nameField);
+
+        $imagesRes = [];
+        foreach ($images as $imgOne) {
+            if ($paramImg) {
+                $imagesRes["/" . $imgOne] = glide($imgOne, $paramImg);
+            } else {
+                $imagesRes[] = "/" . $imgOne;
+            }
         }
 
         return $imagesRes;
@@ -70,7 +96,7 @@ trait ImagesTrait
     public function getWatermark($width = '', $height = '', $options = array())
     {
         if (Config::get("builder::watermark.active") && $this->picture) {
-            return "/img/watermark/".ltrim($this->picture, "/");
+            return "/img/watermark/" . ltrim($this->picture, "/");
         } else {
             return $this->getImgPath($width, $height, $options);
         }

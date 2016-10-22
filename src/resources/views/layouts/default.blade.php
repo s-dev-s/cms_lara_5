@@ -39,6 +39,7 @@
                 '/packages/vis/builder/js/xchart/css/xcharts.min.css',
                 '/packages/vis/builder/js/xchart/css/daterangepicker.css',
                 '/packages/vis/builder/js/multiselect_master/css/ui.multiselect.css',
+                '/packages/vis/builder/css/cropper.min.css',
                 '/packages/vis/builder/css/your_style.css',
                 ));
          !!}
@@ -47,7 +48,7 @@
         <!-- GOOGLE FONT -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
         <script src="/packages/vis/builder/js/libs/jquery-2.0.2.min.js"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 
         {!! Minify::javascript(
             array(
@@ -69,9 +70,10 @@
                   '/packages/vis/builder/js/plugin/resizableColumns/jquery.resizableColumns.js',
                   '/packages/vis/builder/js/plugin/resizableColumns/store.js',
                   '/packages/vis/builder/tb-tree.js',
+                  '/packages/vis/builder/js/cropper.js'
                   ));
         !!}
-         <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/ui-lightness/jquery-ui.css" />
+         <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/ui-lightness/jquery-ui.css" />
          @if (isset($customJs) && count($customJs))
             @foreach($customJs as $jsFile)
                 <script src="{{$jsFile}}"></script>
@@ -104,7 +106,13 @@
         @include('admin::partials.scripts')
         @yield('scripts')
         @include('admin::partials.translate_phrases')
+
         <div class="load_page" style="position: absolute; display: none; z-index: 1111111; height: 50px; top: 10px; left: 50%"><i class="fa fa-spinner fa-spin" style="font-size: 30px"></i></div>
+        @include('admin::partials.popup_cropp')
+        <!-- Modal -->
+
+        <script src="/packages/vis/builder/js/cropper_model.js"></script>
+
     </body>
 
 </html>

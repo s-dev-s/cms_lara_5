@@ -5,7 +5,6 @@ namespace Vis\Builder\Fields;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
 
-
 class SelectField extends AbstractField
 {
 
@@ -87,8 +86,6 @@ class SelectField extends AbstractField
         } else {
             return $val;
         }
-
-
     } // end getListValue
 
     public function getRowColor($row)

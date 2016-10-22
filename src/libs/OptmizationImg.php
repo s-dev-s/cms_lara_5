@@ -10,7 +10,6 @@ class OptmizationImg
         $fullPathPicture = public_path().$pathImg;
 
         if (Config::get("builder.optimization_img.active")) {
-
             $commandPng = Config::get("builder.optimization_img.png_path");
             $commandJpg = Config::get("builder.optimization_img.jpg_path");
 
@@ -23,7 +22,6 @@ class OptmizationImg
                     exec($commandJpg, $res);
                 }
             } catch (\Exception $e) {
-
             }
         }
     }

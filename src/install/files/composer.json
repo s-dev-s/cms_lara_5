@@ -45,7 +45,8 @@
       "Illuminate\\Foundation\\ComposerScripts::postUpdate",
       "php artisan clear-compiled",
       "php artisan ide-helper:generate",
-      "php artisan optimize"
+      "php artisan optimize",
+      "php artisan vendor:publish --tag=public --force"
     ]
   },
   "config": {

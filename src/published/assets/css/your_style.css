@@ -379,3 +379,9 @@ div.dataTables_info{
 #tb-tree-table thead th.text-left a{
     color: #fff;
 }
+#screenshot{
+    background-color: #fff;
+}
+.multi-checkbox.checkbox input{
+    margin-left: -7px;
+}

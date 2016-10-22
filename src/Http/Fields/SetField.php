@@ -1,12 +1,11 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
 
-
-class SetField extends AbstractField 
+class SetField extends AbstractField
 {
 
     public function isEditable()
@@ -44,7 +43,7 @@ class SetField extends AbstractField
         if ($this->hasCustomHandlerMethod('onGetEditInput')) {
             $res = $this->handler->onGetEditInput($this, $row);
             if ($res) {
-                return $res; 
+                return $res;
             }
         }
 
@@ -116,5 +115,4 @@ class SetField extends AbstractField
         
         return implode(', ', $prepared);
     } // end getListValue
-    
 }

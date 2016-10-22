@@ -4,7 +4,8 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
 
-class Img {
+class Img
+{
 
     private $size;
     private $nameFile;
@@ -75,7 +76,9 @@ class Img {
     protected function createRatioImg($img)
     {
         $img->resize(
-            $this->width, $this->height, function ($constraint) {
+            $this->width,
+            $this->height,
+            function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             }

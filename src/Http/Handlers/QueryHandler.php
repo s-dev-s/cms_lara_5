@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cache;
 
-class QueryHandler 
+class QueryHandler
 {
 
     protected $controller;
@@ -65,7 +65,7 @@ class QueryHandler
 
         if ($order && $isUserFilters) {
             $this->db->orderBy($this->getOptionDB('table') .'.'. $order['field'], $order['direction']);
-        } else if ($this->hasOptionDB('order')) {
+        } elseif ($this->hasOptionDB('order')) {
             $order = $this->getOptionDB('order');
 
             foreach ($order as $field => $direction) {
@@ -105,13 +105,13 @@ class QueryHandler
     private function dofilter()
     {
         if (Input::has("filter")) {
-           $filters = Input::get("filter");
+            $filters = Input::get("filter");
 
-           foreach($filters as $nameField => $valueField) {
-               if ($valueField) {
-                   $this->db->where($nameField, $valueField);
-               }
-           }
+            foreach ($filters as $nameField => $valueField) {
+                if ($valueField) {
+                    $this->db->where($nameField, $valueField);
+                }
+            }
         }
     }
 
@@ -164,12 +164,13 @@ class QueryHandler
         $this->db->select($this->getOptionDB('table') .'.id');
         $def = $this->controller->getDefinition();
         if (isset($def['options']['is_sortable']) && $def['options']['is_sortable']) {
-
             if (!Schema::hasColumn($this->getOptionDB('table'), "priority")) {
-                Schema::table($this->getOptionDB('table'),
+                Schema::table(
+                    $this->getOptionDB('table'),
                     function ($table) {
                         $table->integer("priority");
-                    });
+                    }
+                );
             }
 
             $this->db->addSelect($this->getOptionDB('table') .'.priority');
@@ -263,7 +264,7 @@ class QueryHandler
             $modelObj->setFillable(array_keys($updateData));
         }
 
-        foreach($updateData as $fild => $data) {
+        foreach ($updateData as $fild => $data) {
             if (is_array($data)) {
                 $updateDataRes[$fild] = json_encode($data);
             } else {
@@ -366,7 +367,8 @@ class QueryHandler
         return $res;
     } // end deleteRow
 
-    public function fastSave($input) {
+    public function fastSave($input)
+    {
         $this->clearCache();
 
         $nameField = $input['name'];
@@ -407,7 +409,7 @@ class QueryHandler
         if (!$id) {
             //$this->doPrependFilterValues($insertData);
 
-            foreach($insertData as $fild => $data) {
+            foreach ($insertData as $fild => $data) {
                 if (is_array($data)) {
                     $insertDataRes[$fild] = json_encode($data);
                 } else {
@@ -419,7 +421,8 @@ class QueryHandler
 
             $objectModel = new $model;
             foreach ($insertDataRes as $key => $value) {
-                $objectModel->$key = "$value";
+                $objectModel->$key = (null !== $value) ? "$value" : null;
+                ;
             }
             $objectModel->save();
             $id = $objectModel->id;
@@ -476,7 +479,7 @@ class QueryHandler
                         $field->doValidate($values[$fieldName]);
                     }
                 } else {
-                    if (isset($values[$ident])) {
+                    if (array_key_exists($ident, $values)) {
                         $field->doValidate($values[$ident]);
                     }
                 }
@@ -558,13 +561,10 @@ class QueryHandler
             $tabs = $field->getAttribute('tabs');
 
             if ($tabs) {
-
                 foreach ($tabs as $tab) {
                     $this->_checkField($values, $ident, $field);
                 }
-
             } else {
-
                 if (isset($values[$ident])) {
                     $this->_checkField($values, $ident, $field);
                 }
@@ -580,14 +580,14 @@ class QueryHandler
     } // end _checkField
 
 
-    public  function clearCache() {
+    public function clearCache()
+    {
         $definition = $this->controller->getDefinition();
 
         if (isset($definition['cache'])) {
             $cache = $definition['cache'];
 
             foreach ($cache as $key => $cacheDelete) {
-
                 if ($key == "tags") {
                     foreach ($cacheDelete as $tag) {
                         Cache::tags($tag)->flush();
@@ -601,7 +601,5 @@ class QueryHandler
                 }
             }
         }
-
     }
-
 }

@@ -33,10 +33,8 @@ class AuthenticateFrontend
                     return  response()->view('admin::errors.401', [], 401);
                 }
             }
-
         } catch (\Cartalyst\Sentinel\Checkpoints\NotActivatedException $e) {
-
-            Session::flash ("login_not_found", "Пользователь не активирован");
+            Session::flash("login_not_found", "Пользователь не активирован");
             Sentinel::logout();
 
             return  response()->view('admin::errors.401', [], 401);

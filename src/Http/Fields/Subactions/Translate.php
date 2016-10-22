@@ -2,7 +2,6 @@
 
 namespace Vis\Builder\Fields\Subactions;
 
-
 class Translate extends AbstractSubaction
 {
     
@@ -16,6 +15,4 @@ class Translate extends AbstractSubaction
         
         return \View::make('admin::tb.subactions.translate', $data)->render();
     } // end fetch
-    
 }
-    

@@ -39,7 +39,7 @@ class SettingsController extends Controller
             ->with('title', $title)
             ->with('breadcrumb', $breadcrumb)
             ->with("data", $allpage)
-            ->with("groups",$groups);
+            ->with("groups", $groups);
     } // end fetchIndex
 
     /*
@@ -51,8 +51,8 @@ class SettingsController extends Controller
         $groups = Config::get('builder.settings.groups');
 
         return View::make('admin::settings.part.form_settings')
-            ->with("type",$types)
-            ->with("groups",$groups);
+            ->with("type", $types)
+            ->with("groups", $groups);
     } // end fetchCreate
 
     /*
@@ -64,7 +64,7 @@ class SettingsController extends Controller
         parse_str(Input::get('data'), $data);
 
         $validation = Setting::isValid($data, $data['id']);
-        if($validation){
+        if ($validation) {
             return $validation;
         }
 
@@ -82,7 +82,6 @@ class SettingsController extends Controller
                 "ok_messages"       => $ok_messages,
             )
         );
-
     }  // end doSave
 
     /*
@@ -97,7 +96,6 @@ class SettingsController extends Controller
                 'status' => 'ok'
             )
         );
-
     }
 
     /*
@@ -113,7 +111,7 @@ class SettingsController extends Controller
 
             $select_info = array();
             if ($page->type == 2 || $page->type == 3  || $page->type == 5) {
-                $select_info = SettingSelect::where("id_setting",$page->id)
+                $select_info = SettingSelect::where("id_setting", $page->id)
                     -> orderBy("priority")
                     -> get()
                     ->toArray();
@@ -121,9 +119,9 @@ class SettingsController extends Controller
 
             return View::make('admin::settings.part.form_settings')
                 ->with('info', $page)
-                ->with("type",$type)
-                ->with("select_info",$select_info)
-                ->with("groups",$groups);
+                ->with("type", $type)
+                ->with("select_info", $select_info)
+                ->with("groups", $groups);
         }
     } // end fetchEdit
 

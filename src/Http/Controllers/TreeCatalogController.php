@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
+
 //use Illuminate\Http\Request;
 
 class TreeCatalogController
@@ -33,7 +34,6 @@ class TreeCatalogController
     {
       // print_arr(Input::all());
         switch (Input::get('query_type')) {
-
             case 'do_create_node':
                 return $this->doCreateNode();
 
@@ -79,8 +79,6 @@ class TreeCatalogController
             default:
                 throw new \RuntimeException('someone tries to hack me :c');
         }
-
-
     } // end doUpdateNode
 
     public function doCreateNode()
@@ -270,7 +268,6 @@ class TreeCatalogController
         } else {
             return View::make('admin::tree', compact('content', 'current', 'parentIDs', 'treeName'));
         }
-
     } // end handleShowCatalog
 
     public function getEditModalForm()
@@ -339,5 +336,4 @@ class TreeCatalogController
 
         return Response::json($result);
     } // end doEditNode
-
 }

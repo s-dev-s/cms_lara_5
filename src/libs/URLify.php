@@ -15,7 +15,7 @@
  *     echo URLify::filter ('Lo siento, no hablo español.');
  *     // "lo-siento-no-hablo-espanol"
  */
-class URLify 
+class URLify
 {
     public static $maps = array(
         'de' => array( /* German */
@@ -152,7 +152,7 @@ class URLify
     /**
      * Initializes the character map.
      */
-    private static function init($language = "") 
+    private static function init($language = "")
     {
         if (count(self::$map) > 0 && (($language == "") || ($language == self::$language))) {
             return;
@@ -183,7 +183,7 @@ class URLify
     /**
      * Add new characters to the list. `$map` should be a hash.
      */
-    public static function add_chars($map) 
+    public static function add_chars($map)
     {
         if (!is_array($map)) {
             throw new LogicException('$map must be an associative array.');
@@ -197,7 +197,7 @@ class URLify
      * Append words to the remove list. Accepts either single words
      * or an array of words.
      */
-    public static function remove_words($words) 
+    public static function remove_words($words)
     {
         $words = is_array($words) ? $words : array($words);
         self::$remove_list = array_merge(self::$remove_list, $words);
@@ -208,7 +208,7 @@ class URLify
      * $language specifies a priority for a specific language.
      * The latter is useful if languages have different rules for the same character.
      */
-    public static function downcode($text, $language = "") 
+    public static function downcode($text, $language = "")
     {
         self::init($language);
 
@@ -226,10 +226,10 @@ class URLify
     /**
      * Filters a string, e.g., "Petty theft" to "petty-theft"
      */
-    public static function filter($text, $length = 60, $language = "", $file_name = false) 
+    public static function filter($text, $length = 60, $language = "", $file_name = false)
     {
         $text = strip_tags($text);
-        $text = self::downcode($text,$language);
+        $text = self::downcode($text, $language);
 
         // remove all these words from the string before urlifying
         $text = preg_replace('/\b(' . join('|', self::$remove_list) . ')\b/i', '', $text);
@@ -247,9 +247,8 @@ class URLify
     /**
      * Alias of `URLify::downcode()`.
      */
-    public static function transliterate ($text) 
+    public static function transliterate($text)
     {
         return self::downcode($text);
     }
-    
 }

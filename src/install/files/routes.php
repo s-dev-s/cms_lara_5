@@ -5,8 +5,8 @@ Route::pattern('slug', '[a-z0-9-]+');
 
 include 'view_composers.php';
 
-Route::group (['prefix' => LaravelLocalization::setLocale ()],
-
+Route::group(
+    ['prefix' => LaravelLocalization::setLocale()],
     function () {
 
         Route::get('/articles/{slug}-{id}', [
@@ -18,7 +18,5 @@ Route::group (['prefix' => LaravelLocalization::setLocale ()],
             'as' => 'product',
             'uses' => 'ProductController@showPage'
         ]);
-
- });
-
-
+    }
+);

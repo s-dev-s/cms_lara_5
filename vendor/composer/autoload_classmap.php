@@ -6,8 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\\Modules\\Settings\\Models\\SettingSelect' => $baseDir . '/src/Models/SettingSelect.php',
     'Vis\\Builder\\Authenticate' => $baseDir . '/src/Http/Middleware/Authenticate.php',
+    'Vis\\Builder\\AuthenticateFrontend' => $baseDir . '/src/Http/Middleware/AuthenticateFrontend.php',
+    'Vis\\Builder\\DashboardController' => $baseDir . '/src/Http/Controllers/DashboardController.php',
     'Vis\\Builder\\EditorController' => $baseDir . '/src/Http/Controllers/EditorController.php',
     'Vis\\Builder\\Event' => $baseDir . '/src/Models/Event.php',
     'Vis\\Builder\\Facades\\Jarboe' => $baseDir . '/src/Http/Facades/Jarboe.php',
@@ -62,6 +63,7 @@ return array(
     'Vis\\Builder\\PhotosController' => $baseDir . '/src/Http/Controllers/PhotosController.php',
     'Vis\\Builder\\Revision' => $baseDir . '/src/Models/Revision.php',
     'Vis\\Builder\\Setting' => $baseDir . '/src/Models/Setting.php',
+    'Vis\\Builder\\SettingSelect' => $baseDir . '/src/Models/SettingSelect.php',
     'Vis\\Builder\\SettingsController' => $baseDir . '/src/Http/Controllers/SettingsController.php',
     'Vis\\Builder\\TBController' => $baseDir . '/src/Http/Controllers/TBController.php',
     'Vis\\Builder\\TBTreeController' => $baseDir . '/src/Http/Controllers/TBTreeController.php',

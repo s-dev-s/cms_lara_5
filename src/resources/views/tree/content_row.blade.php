@@ -32,7 +32,11 @@
                 data-pk="{{ $item->id }}"
                 data-value="{{ $item->template }}"
                 data-original-title="{{__cms("Выберите шаблон")}}">
-                    {{ $item->template }}
+                    @if (isset(Config::get('builder.'.$treeName.'.templates')[$item->template]['title']))
+                        {{Config::get('builder.'.$treeName.'.templates')[$item->template]['title']}}
+                    @else
+                        {{ $item->template }}
+                    @endif
             </a>
         </td>
         <td style="white-space: nowrap;">{{ $item->slug }}</td>

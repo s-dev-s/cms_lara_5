@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
@@ -6,8 +6,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 
-
-class FileStorageField extends AbstractField 
+class FileStorageField extends AbstractField
 {
 
     public function isEditable()
@@ -52,5 +51,4 @@ class FileStorageField extends AbstractField
         
         return $value;
     } // end prepareQueryValue
-
 }

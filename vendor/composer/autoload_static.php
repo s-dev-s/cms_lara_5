@@ -21,8 +21,9 @@ class ComposerStaticInitedc9d662b0f06a8c2b9bb0aff37e8400
     );
 
     public static $classMap = array (
-        'App\\Modules\\Settings\\Models\\SettingSelect' => __DIR__ . '/../..' . '/src/Models/SettingSelect.php',
         'Vis\\Builder\\Authenticate' => __DIR__ . '/../..' . '/src/Http/Middleware/Authenticate.php',
+        'Vis\\Builder\\AuthenticateFrontend' => __DIR__ . '/../..' . '/src/Http/Middleware/AuthenticateFrontend.php',
+        'Vis\\Builder\\DashboardController' => __DIR__ . '/../..' . '/src/Http/Controllers/DashboardController.php',
         'Vis\\Builder\\EditorController' => __DIR__ . '/../..' . '/src/Http/Controllers/EditorController.php',
         'Vis\\Builder\\Event' => __DIR__ . '/../..' . '/src/Models/Event.php',
         'Vis\\Builder\\Facades\\Jarboe' => __DIR__ . '/../..' . '/src/Http/Facades/Jarboe.php',
@@ -77,6 +78,7 @@ class ComposerStaticInitedc9d662b0f06a8c2b9bb0aff37e8400
         'Vis\\Builder\\PhotosController' => __DIR__ . '/../..' . '/src/Http/Controllers/PhotosController.php',
         'Vis\\Builder\\Revision' => __DIR__ . '/../..' . '/src/Models/Revision.php',
         'Vis\\Builder\\Setting' => __DIR__ . '/../..' . '/src/Models/Setting.php',
+        'Vis\\Builder\\SettingSelect' => __DIR__ . '/../..' . '/src/Models/SettingSelect.php',
         'Vis\\Builder\\SettingsController' => __DIR__ . '/../..' . '/src/Http/Controllers/SettingsController.php',
         'Vis\\Builder\\TBController' => __DIR__ . '/../..' . '/src/Http/Controllers/TBController.php',
         'Vis\\Builder\\TBTreeController' => __DIR__ . '/../..' . '/src/Http/Controllers/TBTreeController.php',

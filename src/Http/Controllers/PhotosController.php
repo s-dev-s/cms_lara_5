@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Routing\Controller;
 
-class PhotosController extends \BaseController
+class PhotosController extends Controller
 {
     public function fetchShowAll()
     {
@@ -42,6 +43,5 @@ class PhotosController extends \BaseController
                 'status' => 'success',
             )
         );
-
     }
 }

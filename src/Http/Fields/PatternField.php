@@ -1,11 +1,10 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
 use Illuminate\Support\Facades\View;
 
-
-class PatternField 
+class PatternField
 {
     
     protected $fieldName;
@@ -44,13 +43,13 @@ class PatternField
     {
         $call = $this->calls['handle']['update'];
         return $call($values, $idRow);
-    } // end update    
+    } // end update
     
     public function insert($values, $idRow)
     {
         $call = $this->calls['handle']['insert'];
         return $call($values, $idRow);
-    } // end insert    
+    } // end insert
     
     public function delete($idRow)
     {
@@ -62,5 +61,4 @@ class PatternField
     {
         return true;
     } // end isPattern
-    
 }

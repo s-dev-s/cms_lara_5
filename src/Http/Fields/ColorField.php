@@ -1,11 +1,10 @@
-<?php 
+<?php
 
 namespace Vis\Builder\Fields;
 
 use Illuminate\Support\Facades\View;
 
-
-class ColorField extends AbstractField 
+class ColorField extends AbstractField
 {
 
     public function onSearchFilter(&$db, $value)
@@ -44,5 +43,4 @@ class ColorField extends AbstractField
 
         return $input->render();
     } // end getEditInput
-    
 }

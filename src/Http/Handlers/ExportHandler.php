@@ -5,8 +5,7 @@ namespace Vis\Builder\Handlers;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 
-
-class ExportHandler 
+class ExportHandler
 {
     
     protected $def;
@@ -191,26 +190,24 @@ class ExportHandler
     {
         $style = '';
         
-        // Tell Excel to treat as a number. Note that Excel only stores roughly 15 digits, so keep 
+        // Tell Excel to treat as a number. Note that Excel only stores roughly 15 digits, so keep
         // as text if number is longer than that.
         if (preg_match("/^-?\d+(?:[.,]\d+)?$/", $value) && (strlen($value) < 15)) {
             $type = 'Number';
-        }
-        // Sniff for valid dates; should look something like 2010-07-14 or 7/14/2010 etc. Can
+        } // Sniff for valid dates; should look something like 2010-07-14 or 7/14/2010 etc. Can
         // also have an optional time after the date.
         //
         // Note we want to be very strict in what we consider a date. There is the possibility
-        // of really screwing up the data if we try to reformat a string that was not actually 
+        // of really screwing up the data if we try to reformat a string that was not actually
         // intended to represent a date.
-        else if(preg_match("/^(\d{1,2}|\d{4})[\/\-]\d{1,2}[\/\-](\d{1,2}|\d{4})([^\d].+)?$/", $value) &&
+        elseif (preg_match("/^(\d{1,2}|\d{4})[\/\-]\d{1,2}[\/\-](\d{1,2}|\d{4})([^\d].+)?$/", $value) &&
                     ($timestamp = strtotime($value)) &&
                     ($timestamp > 0) &&
                     ($timestamp < strtotime('+500 years'))) {
             $type = 'DateTime';
             $value = strftime("%Y-%m-%dT%H:%M:%S", $timestamp);
             $style = 'sDT'; // defined in header; tells excel to format date for display
-        }
-        else {
+        } else {
             $type = 'String';
         }
                 
@@ -248,7 +245,7 @@ class ExportHandler
         header('Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate');
         header('Last-Modified: '. $now .' GMT');
     
-        // force download  
+        // force download
         header('Content-Type: application/force-download');
         header('Content-Type: application/octet-stream');
         header('Content-Type: application/download');
@@ -265,5 +262,4 @@ class ExportHandler
     {
         return isset($this->def[$ident]) ? $this->def[$ident] : $default;
     } // end getAttribute
-    
 }

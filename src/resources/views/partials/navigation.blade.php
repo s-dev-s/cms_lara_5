@@ -19,7 +19,7 @@
                         <i class="fa fa-lg fa-fw fa-{{$el['icon']}}"></i>
                         <span class="menu-item-parent">{{__cms($el['title'])}}</span>
                         @if (isset($el['badge']))
-                           <? $countBadge = $el['badge'](); ?>
+                           <?php $countBadge = $el['badge'](); ?>
                            @if (is_numeric($countBadge))
                             <span class="badge bg-color-greenLight pull-right inbox-badge">{{$countBadge}}</span>
                            @endif
@@ -36,7 +36,7 @@
                                     >{{__cms($sub_menu['title'])}}
 
                                     @if (isset($sub_menu['badge']))
-                                       <? $countBadge = $sub_menu['badge'](); ?>
+                                       <?php $countBadge = $sub_menu['badge'](); ?>
                                        @if (is_numeric($countBadge))
                                         <span class="badge bg-color-greenLight pull-right inbox-badge">{{$countBadge}}</span>
                                        @endif
@@ -51,7 +51,7 @@
                                                     <a {!!isset($sub_menu2['link']) && !isset($sub_menu2['submenu']) ? "href='/admin".$sub_menu2['link']."'" : "" !!}>{{__cms($sub_menu2['title'])}}</a>
 
                                                      @if (isset($sub_menu2['badge']))
-                                                       <? $countBadge = $sub_menu2['badge'](); ?>
+                                                       <?php $countBadge = $sub_menu2['badge'](); ?>
                                                        @if (is_numeric($countBadge))
                                                         <span class="badge bg-color-greenLight pull-right inbox-badge">{{$countBadge}}</span>
                                                        @endif

@@ -1,7 +1,6 @@
 <?php
 
-if (!function_exists('dr'))
-{
+if (!function_exists('dr')) {
     function dr($array)
     {
         echo '<pre>';
@@ -9,8 +8,7 @@ if (!function_exists('dr'))
     } // end dr
 }
 
-if (!function_exists('print_arr'))
-{
+if (!function_exists('print_arr')) {
     function print_arr($array)
     {
         echo '<pre>';
@@ -19,8 +17,7 @@ if (!function_exists('print_arr'))
     } // end dr
 }
 
-if (!function_exists('cartesian'))
-{
+if (!function_exists('cartesian')) {
     function cartesian($arr, $isElementsDuplicated = false)
     {
         $variant = array();
@@ -31,8 +28,7 @@ if (!function_exists('cartesian'))
     } // end cartesian
 }
 
-if (!function_exists('cartesianRecurseIt'))
-{
+if (!function_exists('cartesianRecurseIt')) {
     function cartesianRecurseIt($arr, $variant, $level, $result, $arrayCount, $isElementsDuplicated)
     {
         $level++;
@@ -50,12 +46,11 @@ if (!function_exists('cartesianRecurseIt'))
                 }
             }
         }
-        return $result;
+            return $result;
     } // end cartesianRecurseIt
 }
 
-if (!function_exists('remove_bom'))
-{
+if (!function_exists('remove_bom')) {
     function remove_bom($val)
     {
         if (substr($val, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
@@ -65,8 +60,7 @@ if (!function_exists('remove_bom'))
     } // end remove_bom
 }
 
-if (!function_exists('glide'))
-{
+if (!function_exists('glide')) {
     function glide($source, $options = array())
     {
         $img = new Vis\Builder\Img();
@@ -74,8 +68,7 @@ if (!function_exists('glide'))
     }
 }
 
-if (!function_exists('filesize_format'))
-{
+if (!function_exists('filesize_format')) {
     function filesize_format($bytes)
     {
         if ($bytes >= 1073741824) {
@@ -92,13 +85,12 @@ if (!function_exists('filesize_format'))
             $bytes = '0 bytes';
         }
 
-        return $bytes;
+            return $bytes;
     } // end filesize_format
 }
 
 //return localization url
-if (!function_exists('geturl'))
-{
+if (!function_exists('geturl')) {
     function geturl($url, $locale = false, $attributes = array())
     {
         if (!$locale) {
@@ -115,7 +107,7 @@ if (!function_exists('geturl'))
  *
  * @return string
  */
-if(!function_exists("__cms")) {
+if (!function_exists("__cms")) {
     function __cms($phrase)
     {
         $this_lang = Cookie::get("lang_admin");
@@ -137,7 +129,7 @@ if(!function_exists("__cms")) {
  *
  * @return string
  */
-if(!function_exists("getIp")) {
+if (!function_exists("getIp")) {
     function getIp()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -157,7 +149,7 @@ if(!function_exists("getIp")) {
  *  recurse create url for tree
  *  @return string
  */
-if(!function_exists("recurseMyTree")) {
+if (!function_exists("recurseMyTree")) {
     function recurseMyTree($tree, $node, &$slugs = array())
     {
         if (!$node['parent_id']) {

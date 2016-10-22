@@ -3,7 +3,7 @@
  RewriteRule \.php$ - [F]
 
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml application/javascript application/xml application/x-font-ttf application/xhtml+xml text/javascript text/css application/x-javascript
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml application/javascript application/xml application/x-font-woff application/x-font-ttf application/xhtml+xml text/javascript text/css application/x-javascript
     BrowserMatch ^Mozilla/4 gzip-only-text/html
     BrowserMatch ^Mozilla/4.0[678] no-gzip
     BrowserMatch bMSIE !no-gzip !gzip-only-text/html
@@ -16,14 +16,14 @@
 
 FileETag MTime Size
 <ifmodule mod_expires.c>
-    <filesmatch ".(jpg|JPG|jpeg|gif|png|ico|css|js|svg|ttf)$">
+    <filesmatch ".(jpg|JPG|jpeg|gif|png|ico|css|js|svg|ttf|woff)$">
     ExpiresActive on
     ExpiresDefault "access plus 1 month"
     </filesmatch>
 </ifmodule>
 
 <ifModule mod_headers.c>
-    <filesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|swf|svg|ttf)$">
+    <filesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|swf|svg|ttf|woff)$">
     Header set Cache-Control "max-age=2592000, public"
     </filesMatch>
     <filesMatch "\\.(css)$">
