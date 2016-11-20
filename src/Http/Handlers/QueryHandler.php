@@ -266,6 +266,19 @@ class QueryHandler
 
         foreach ($updateData as $fild => $data) {
             if (is_array($data)) {
+
+                if (isset($def['fields'][$fild]['multi']) &&  $def['fields'][$fild]['multi']) {
+                    foreach ($data as $k => $dataElement) {
+                        if (!$dataElement) {
+                            unset($data[$k]);
+                        }
+                    }
+
+                    if (count($data) == 0) {
+                        $data = [''];
+                    }
+                }
+
                 $updateDataRes[$fild] = json_encode($data);
             } else {
                 $updateDataRes[$fild] = $data;
@@ -408,15 +421,29 @@ class QueryHandler
 
         if (!$id) {
             //$this->doPrependFilterValues($insertData);
-
+            $def = $this->controller->getDefinition();
+            
             foreach ($insertData as $fild => $data) {
                 if (is_array($data)) {
+
+                    if (isset($def['fields'][$fild]['multi']) &&  $def['fields'][$fild]['multi']) {
+                        foreach ($data as $k => $dataElement) {
+                            if (!$dataElement) {
+                                unset($data[$k]);
+                            }
+                        }
+
+                        if (count($data) == 0) {
+                            $data = [''];
+                        }
+                    }
+
                     $insertDataRes[$fild] = json_encode($data);
                 } else {
                     $insertDataRes[$fild] = $data;
                 }
             }
-            $def = $this->controller->getDefinition();
+
             $model = $def['options']['model'];
 
             $objectModel = new $model;
@@ -546,13 +573,20 @@ class QueryHandler
         return $values;
     } // end _unsetFutileFields
 
-    private function _checkFields($values)
+    private function _checkFields(&$values)
     {
         $definition = $this->controller->getDefinition();
         $fields = $definition['fields'];
 
         foreach ($fields as $ident => $options) {
             $field = $this->controller->getField($ident);
+
+            if (method_exists($field, 'getNewValueId') && isset($values[$ident . '_new_foreign'])) {
+                if ($new_id = $field->getNewValueId($values[$ident . '_new_foreign'])) {
+                    $values[$ident] = $new_id;
+                }
+                unset($values[$ident . '_new_foreign']);
+            }
 
             if ($field->isPattern()) {
                 continue;

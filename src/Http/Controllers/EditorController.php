@@ -76,9 +76,16 @@ class EditorController extends Controller
         unset($imgs[1]);
 
         $imgRes = array();
+        $k = 0;
         foreach ($imgs as $img) {
-            $imgRes[] = "/storage/editor/fotos/".$img;
+            if (is_file( public_path() . "/storage/editor/fotos/" . $img)) {
+                $imgRes[$k]['url'] = "/storage/editor/fotos/" . $img;
+                $imgRes[$k]['thumb'] = "/storage/editor/fotos/" . $img;
+                $k++;
+            }
         }
+
+        //print_arr($imgRes);
 
         return Response::json($imgRes);
     }

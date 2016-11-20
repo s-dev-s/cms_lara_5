@@ -130,6 +130,21 @@ class ForeignField extends AbstractField
         return $value;
     }
 
+    public function getNewValueId($input='')
+    {
+        $new_id = null;
+        if (strlen($input)) {
+            $foreignTable = $this->getAttribute('foreign_table');
+            $foreignKey = $this->getAttribute('foreign_key_field');
+            $foreignValueField = $this->getAttribute('foreign_value_field');
+            $first = DB::table($foreignTable)->where($foreignValueField, '=', $input)->first();
+            if (!$first) {
+                $new_id = DB::table($foreignTable)->insertGetId([$foreignValueField => $input]);
+            }
+        }
+        return $new_id;
+    }
+
     public function getValue($row, $postfix = '')
     {
         if ($this->hasCustomHandlerMethod('onGetValue')) {
@@ -174,6 +189,7 @@ class ForeignField extends AbstractField
         $input->is_null  = $this->getAttribute('is_null');
         $input->null_caption = $this->getAttribute('null_caption');
         $input->recursive = $this->getAttribute('recursive');
+        $input->allow_foreign_add = $this->getAttribute('foreign_allow_add');
 
         if ($input->recursive) {
             $this->treeMy = $this->getCategory($this->getAttribute('recursiveIdCatalog'));

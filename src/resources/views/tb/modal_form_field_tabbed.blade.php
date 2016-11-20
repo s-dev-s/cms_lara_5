@@ -36,25 +36,25 @@
             @if ($options['type'] != "readonly")
              <label class="label" for="{{$ident}}">{{__cms($options['caption'])}}</label>
                 <div style="position: relative;">
-                    <label class="{{ $field->getLabelClass() }}">
+
                     {!! $field->getEditInput() !!}
                     {!! $field->getSubActions() !!}
-                    </label>
+
                 </div>
             @endif
         @else
             <label class="label" for="{{$ident}}">{{__cms($options['caption'])}}</label>
             <div style="position: relative;">
               @if($options['type'] == "wysiwyg")
-                 <label class="{{ $field->getLabelClass() }}"></label>
+
                     {!! $field->getEditInput($row) !!}
                     {!! $field->getSubActions() !!}
 
               @else
-                  <label class="{{ $field->getLabelClass() }}">
+
                       {!! $field->getEditInput($row) !!}
                       {!! $field->getSubActions() !!}
-                  </label>
+
               @endif
 
             </div>

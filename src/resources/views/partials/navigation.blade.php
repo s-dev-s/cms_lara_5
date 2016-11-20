@@ -14,7 +14,7 @@
         <ul style="display: block;">
             @foreach($menu as $k=>$el)
               @if(!isset($el['check']) || $el['check']())
-                 <li {{isset($el['link']) &&  Request::URL() == URL::to("/admin".$el['link'])?"class='active'":""}}>
+                 <li class="level1">
                      <a  {!! isset($el['link']) && !isset($el['submenu'])? "href='/admin".$el['link']."'" : "" !!}>
                         <i class="fa fa-lg fa-fw fa-{{$el['icon']}}"></i>
                         <span class="menu-item-parent">{{__cms($el['title'])}}</span>
@@ -30,7 +30,7 @@
                        <ul>
                           @foreach($el['submenu'] as $k_sub_menu=>$sub_menu)
                             @if(!isset($sub_menu['check']) || $sub_menu['check']())
-                                <li {{isset($sub_menu['link']) && Request::URL() == URL::to("/admin".$sub_menu['link']) ? "class='active'" : ""}}>
+                                <li >
                                     <a
                                       {!! isset($sub_menu['link']) && !isset($sub_menu['submenu']) ? "href='/admin".$sub_menu['link']."'" : "" !!}
                                     >{{__cms($sub_menu['title'])}}

@@ -227,7 +227,7 @@ var Tree =
     {
         var data = $('#tree-create-modal-form').serializeArray();
         data.push({ name: 'query_type', value: 'do_create_node' });
-
+        $('#tree-create-modal').modal('hide');
         jQuery.ajax({
             url: window.location.href,
             type: 'POST',
@@ -236,9 +236,7 @@ var Tree =
             data: data,
             success: function(response) {
                 if (response.status) {
-                    $('#tree-create-modal').modal('hide');
                     doAjaxLoadContent(location.href);
-
                 } else {
                     TableBuilder.showErrorNotification(phrase['Что-то пошло не так, попробуйте позже']);
                 }

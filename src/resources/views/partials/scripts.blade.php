@@ -81,26 +81,26 @@
        doAjaxLoadContent(window.location.pathname);;
    });
 
-        $(document).on('click', 'nav a', function (e) {
+    $(document).on('click', 'nav a', function (e) {
 
-            var href = $(this).attr('href');
+        var href = $(this).attr('href');
 
-            if (href) {
+        if (href) {
 
-               $("nav li").removeClass("active");
-               $(this).parent().addClass("active");
+           $("nav li").removeClass("active");
+           $(this).parent().addClass("active");
 
-               doAjaxLoadContent(href);
-               e.preventDefault();
-             }
-        });
+           doAjaxLoadContent(href);
+           e.preventDefault();
+         }
+    });
 
-        $(document).on('click', '.pagination a', function (e) {
+    $(document).on('click', '.pagination a', function (e) {
 
-            var href = $(this).attr('href');
-            doAjaxLoadContent(href);
-            e.preventDefault();
-        });
+        var href = $(this).attr('href');
+        doAjaxLoadContent(href);
+        e.preventDefault();
+    });
 
 $(document).ready(function() {
     pageSetUp();
@@ -121,6 +121,7 @@ $(document).ready(function() {
         isRTL: false
     };
     $.timepicker.setDefaults($.timepicker.regional['ru']);
+    TableBuilder.doActiveMenu();
 
 });
 

@@ -1,11 +1,10 @@
 <div class="modal-body">
-                
-                
+
     <form id="edit_form" class="smart-form">
 
         @if (!isset($def['position']))
             <fieldset style="{{ Input::get('edit') ? '' : 'padding:0;' }}">
-            
+
             @include('admin::tb.modal_form_edit_field_simple')
             
             @if (!$is_blank)

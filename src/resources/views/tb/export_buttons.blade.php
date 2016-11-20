@@ -44,7 +44,7 @@
         <div class="btn-group btn-group-justified">
             @foreach ($def['buttons'] as $type => $info)
                 <a href="javascript:void(0);" 
-                   onclick="TableBuilder.doExport('{{ $type }}');" 
+                   onclick="TableBuilder.doExport('{{ $type }}' {{isset($info['url_load']) ? ", '" . $info['url_load'] . "'" : '' }});"
                    class="btn btn-default">
                         {{ $info['caption'] }}
                 </a>

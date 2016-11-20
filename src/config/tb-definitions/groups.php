@@ -11,6 +11,7 @@ return array(
             'uri' => '/admin/handle/groups',
         ),
     ),
+
     'options' => array(
         'caption' => "Группы пользователей",
         'ident' => 'groups-container',
@@ -18,7 +19,21 @@ return array(
         'table_ident' => 'groups-table',
         'action_url' => '/admin/handle/groups',
         'not_found'  => 'NOT FOUND',
+        'handler'    => 'Vis\Builder\Helpers\GroupsHandler',
         'model' => 'Group',
+    ),
+
+    'position' => array(
+        'tabs' => array(
+            'Общая'     => array(
+                'id',
+                'slug',
+                'name',
+            ),
+            'Права доступа' => array(
+                'permissions',
+            ),
+        )
     ),
 
     'fields' => array(
@@ -42,6 +57,22 @@ return array(
             'filter' => 'text',
             'is_sorting' => false,
         ),
+        'permissions' => array(
+            'caption' => "Доступы",
+            'type' => 'text',
+            'filter' => 'text',
+            'is_sorting' => false,
+            'hide_list' => true,
+            'permissions' => array(
+                'admin.access' => 'Доступ в админку',
+                'новости' => array(
+                    'admin.access_views' => 'Просмотр',
+                    'admin.access_edit' => 'Редактирование',
+                    'admin.access_delete' => 'Удаление',
+                )
+            )
+        ),
+
     ),
 
     'actions' => array(

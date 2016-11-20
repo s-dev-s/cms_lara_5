@@ -28,6 +28,7 @@ class GroupField extends AbstractField
         $filds = $this->getAttribute('filds');
         $section = [];
         if (count($valueArray)) {
+
             foreach ($valueArray as $nameVal => $val) {
                 foreach ($val as $k => $res) {
                     $section[$k][$nameVal] = $res;

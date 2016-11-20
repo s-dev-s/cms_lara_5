@@ -155,7 +155,8 @@ class Tree extends \Baum\Node
     public function clearCache()
     {
         $tags = $this->getCacheTags();
-        if ($tags) {
+
+        if (count($tags)) {
             Cache::tags($tags)->flush();
         }
     }

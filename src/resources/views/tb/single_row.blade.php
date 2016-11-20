@@ -28,9 +28,9 @@
                 </div>
 
             @elseif($field->getAttribute('result_show'))
-                  {!!  strip_tags($field->getReplaceStr($row), "<a><span><img>") !!}
+                  {!!  strip_tags($field->getReplaceStr($row), "<a><span><img><br>") !!}
             @else
-                <span>{!! strip_tags($field->getListValue($row), "<a><span><img>") !!}</span>
+                <span>{!! strip_tags($field->getListValue($row), "<a><span><img><br>") !!}</span>
             @endif
         </td>
     @endif

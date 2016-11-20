@@ -23,10 +23,13 @@
                 @endif
                     <div style="position: relative;">
                         <label class="input">
-                        <input type="text" 
+                        <input type="{{$custom_type ? $custom_type : 'text'}}"
                                value="{{{ $tab['value'] }}}" 
                                name="{{ $name . $tab['postfix']}}" 
-                               placeholder="{{{$tab['placeholder']}}}" 
+                               placeholder="{{{$tab['placeholder']}}}"
+                               @if ($mask)
+                                    data-mask="{{$mask}}"
+                               @endif
                                class="dblclick-edit-input form-control input-sm unselectable">
                         </label>
                        @if (isset($comment) && $comment)

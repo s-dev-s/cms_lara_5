@@ -385,3 +385,6 @@ div.dataTables_info{
 .multi-checkbox.checkbox input{
     margin-left: -7px;
 }
+.fr-view li{
+    margin-left: 10px;
+}

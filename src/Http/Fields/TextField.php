@@ -52,12 +52,19 @@ class TextField extends AbstractField
         }
 
         $type = $this->getAttribute('type');
-
         $input = View::make('admin::tb.input_'. $type);
         $input->value = $this->getValue($row);
         $input->name  = $this->getFieldName();
         $input->rows  = $this->getAttribute('rows');
         $input->mask  = $this->getAttribute('mask');
+        $input->custom_type  = $this->getAttribute('custom_type');
+        $input->multi = $this->getAttribute('multi');
+
+        if ($input->multi) {
+            $input->name = $input->name . "[]";
+            $input->value = json_decode($input->value);
+        }
+
         $input->placeholder = $this->getAttribute('placeholder');
         $input->is_password = $this->getAttribute('is_password');
         $input->comment = $this->getAttribute('comment');
@@ -74,6 +81,17 @@ class TextField extends AbstractField
             return $html;
         }
 
-        return parent::getListValue($row);
+        if ($this->getAttribute('multi')) {
+
+           $arrayValue = json_decode($this->getValue($row));
+
+           if (is_array($arrayValue)) {
+              
+               return implode("<br>", $arrayValue);
+           }
+
+        }
+
+        return $this->getValue($row);;
     } // end getListValue
 }

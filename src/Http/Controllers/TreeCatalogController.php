@@ -1,13 +1,13 @@
 <?php namespace Vis\Builder;
 
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 
 //use Illuminate\Http\Request;
 
@@ -112,38 +112,47 @@ class TreeCatalogController
         $model = $this->model;
         $root = $model::find(Input::get('node', 1));
 
+
         $id = Input::get('id');
-        $page = $model::where("id", $id)->select("*")->first()->toArray();
-        $idClonePage = $page['id'];
-        unset($page['id']);
 
-        $tableName = with(new $model)->getTable();
-        $lastId = DB::table($tableName)->insertGetId($page);
-        $cloneRecord = $model::where("id", $lastId)->first();
-        $cloneRecord->slug = $cloneRecord->slug."-".$cloneRecord->id;
-        $cloneRecord->save();
+        $this->cloneRecursively($id);
 
-        $folderCheck =  $model::where("parent_id", $idClonePage)->select("*")->get()->toArray();
-        if (count($folderCheck)) {
-            foreach ($folderCheck as $pageChild) {
-                $pageChild['parent_id'] = $lastId;
-                $pageChild['slug'] = $pageChild['slug']."_".$lastId;
-                unset($pageChild['id']);
-                DB::table($tableName)->insert($pageChild);
-            }
-        }
-
-        // $cloneRecord->makeChildOf($root);
-
-        $cloneRecord::rebuild();
         $root->clearCache();
 
         $res = array(
             'id'     => $id,
-            'status' => $page,
         );
 
         return $res;
+    }
+
+    private function cloneRecursively($id, $parentId = '')
+    {
+        $model = $this->model;
+
+        $page = $model::where("id", $id)->select("*")->first()->toArray();
+        $idClonePage = $page['id'];
+        unset($page['id']);
+        if ($parentId) {
+            $page['parent_id'] = $parentId;
+            $page['slug'] = $page['slug'] . "_" . $page['parent_id'];
+        } else {
+            $page['slug'] = $page['slug'] . "_" . time();
+        }
+
+        $tableName = with(new $model)->getTable();
+        $lastId = DB::table($tableName)->insertGetId($page);
+        $cloneRecord = $model::where("id", $lastId)->first();
+
+        $cloneRecord::rebuild(true);
+
+        $folderCheck =  $model::where("parent_id", $idClonePage)->select("*")->orderBy('lft', 'desc')->get()->toArray();
+        if (count($folderCheck)) {
+            foreach ($folderCheck as $pageChild) {
+                $this->cloneRecursively($pageChild['id'], $lastId);
+            }
+        }
+
     }
 
     public function doChangeActiveStatus()

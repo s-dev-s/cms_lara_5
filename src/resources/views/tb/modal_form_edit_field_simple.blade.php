@@ -31,18 +31,18 @@
         @if ($is_blank)
             <label class="label" for="{{$ident}}">{{__cms($options['caption'])}}</label>
             <div style="position: relative;">
-                <label class="{{ $field->getLabelClass() }}">
+
                 {!! $field->getEditInput() !!}
                 {!! $field->getSubActions() !!}
-                </label>
+
             </div>
         @else
             <label class="label" for="{{$ident}}">{{__cms($options['caption'])}}</label>
             <div style="position: relative;">
-                <label class="{{ $field->getLabelClass() }}">
+
                 {!! $field->getEditInput($row) !!}
                 {!! $field->getSubActions() !!}
-                </label>
+
             </div>
         @endif
     </section>

@@ -1,5 +1,5 @@
 @if ($is_multiple)
-</label>
+
     <div class="multi_pictures">
         <div class="progress progress-micro" style="margin-bottom: 0;">
             <div class="img-progress progress-bar progress-bar-primary bg-color-redLight" role="progressbar"
@@ -41,9 +41,9 @@
         </div>
         <div style="clear: both"></div>
     </div>
-    <label>
+
 @else
-    </label>
+
     <div class="picture_block">
         <div class="progress progress-micro" style="margin-bottom: 0;">
             <div class="img-progress progress-bar progress-bar-primary bg-color-redLight" role="progressbar"
@@ -64,5 +64,5 @@
             @endif
         </div>
     </div>
-    <label>
+
 @endif

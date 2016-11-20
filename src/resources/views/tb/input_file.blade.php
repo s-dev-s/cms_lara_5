@@ -15,14 +15,14 @@
                placeholder="Выберите файлы для загрузки"
                readonly="readonly">
     </div>
-    </label>
+
     @if (isset($comment) && $comment)
       <div class="note">
           {{$comment}}
       </div>
     @endif
 
-    <label>
+
     <div class="tb-uploaded-file-container-{{$name}} uploaded-files">
         <ul>
             @if(isset($source) && is_array($source))
@@ -55,13 +55,13 @@
                 placeholder="@if($value) {{$value}} @else Выберите файл для загрузки @endif"
                 readonly="readonly">
      </div>
-    </label>
+
     @if (isset($comment) && $comment)
       <div class="note">
           {{$comment}}
       </div>
     @endif
-    <label>
+
      <div class="tb-uploaded-file-container-{{$name}}">
          @if ($value)
          <a href="{{url($value)}}" target="_blank">Скачать</a> |
